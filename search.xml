@@ -88,23 +88,6 @@
       </tags>
   </entry>
   <entry>
-    <title>My New Test Post</title>
-    <url>/2024/10/23/My-New-Test-Post/</url>
-    <content><![CDATA[<h2 id="中文跳转测试"><a href="#中文跳转测试" class="headerlink" title="中文跳转测试"></a>中文跳转测试</h2><h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>say something</p>
-<h3 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h3><p>hello world</p>
-<h3 id="test-2"><a href="#test-2" class="headerlink" title="test"></a>test</h3><p>say something</p>
-<h3 id="test-3"><a href="#test-3" class="headerlink" title="test"></a>test</h3><p>hello world</p>
-<h3 id="test-4"><a href="#test-4" class="headerlink" title="test"></a>test</h3><p>say something</p>
-<h3 id="test-5"><a href="#test-5" class="headerlink" title="test"></a>test</h3><p>hello world</p>
-<h2 id="test-jump-2"><a href="#test-jump-2" class="headerlink" title="test jump 2"></a>test jump 2</h2><h3 id="test-6"><a href="#test-6" class="headerlink" title="test"></a>test</h3><p>say something</p>
-<h3 id="test-7"><a href="#test-7" class="headerlink" title="test"></a>test</h3><p>hello world</p>
-<h3 id="test-8"><a href="#test-8" class="headerlink" title="test"></a>test</h3><p>say something</p>
-<h3 id="test-9"><a href="#test-9" class="headerlink" title="test"></a>test</h3><p>hello world</p>
-<h2 id="中文跳转测试-3"><a href="#中文跳转测试-3" class="headerlink" title="中文跳转测试 3"></a>中文跳转测试 3</h2><h3 id="test-10"><a href="#test-10" class="headerlink" title="test"></a>test</h3><p>say something</p>
-<h3 id="test-11"><a href="#test-11" class="headerlink" title="test"></a>test</h3><p>hello world</p>
-]]></content>
-  </entry>
-  <entry>
     <title>linux-screen命令使用详解</title>
     <url>/2024/10/23/linux-screen%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="screen命令"><a href="#screen命令" class="headerlink" title="screen命令"></a>screen命令</h1><h2 id="创建一个新的窗口"><a href="#创建一个新的窗口" class="headerlink" title="创建一个新的窗口"></a>创建一个新的窗口</h2><p>screen -S test</p>
