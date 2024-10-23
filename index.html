@@ -302,19 +302,19 @@
       
         
           
-            <h1 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h1><ol>
+            <h2 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h2><ol>
 <li>系统Microsoft Windows [版本 10.0.19045.5011]</li>
 <li>微信 [版本 3.9.11.25]</li>
 <li>proxifier [版本 4.03 x64]</li>
 <li>burpsuite[版本 Professional 2024.8.4]</li>
 <li>everything</li>
 </ol>
-<h1 id="测试环境搭建"><a href="#测试环境搭建" class="headerlink" title="测试环境搭建"></a>测试环境搭建</h1><ol>
+<h2 id="测试环境搭建"><a href="#测试环境搭建" class="headerlink" title="测试环境搭建"></a>测试环境搭建</h2><ol>
 <li>安装好微信。<a target="_blank" rel="noopener" href="https://pc.weixin.qq.com/">微信下载地址</a></li>
 <li>安装好proxifier，输入激活码：CLOT5-J3GYK-VGPYE-BDPMN-WKWMU（也可以用注册机自己生成：<a target="_blank" rel="noopener" href="https://github.com/y9nhjy/Proxifier-Keygen">注册机下载地址</a>）</li>
 <li>安装burpsuite，<a target="_blank" rel="noopener" href="https://portswigger.net/burp/releases">burpsuite下载地址</a>，<a target="_blank" rel="noopener" href="https://github.com/h3110w0r1d-y/BurpLoaderKeygen">注册机下载地址</a>。安装及破解详细教学地址：<a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/10/winbp.html">burpsuite安装及破解</a></li>
 </ol>
-<h1 id="配置proxifier"><a href="#配置proxifier" class="headerlink" title="配置proxifier"></a>配置proxifier</h1><ol>
+<h2 id="配置proxifier"><a href="#配置proxifier" class="headerlink" title="配置proxifier"></a>配置proxifier</h2><ol>
 <li>配置代理服务器为burpsuite，进入proxifier，找到如下选项</li>
 </ol>
 <p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022155637177.png" alt="image-20241022155637177"></p>
@@ -345,7 +345,7 @@
 <p>“Action”选择我们之前创建好的代理服务器“Proxy HTTPS 127.0.0.1”</p>
 <p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022161758371.png" alt="image-20241022161758371"></p>
 <p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022161704234.png" alt="image-20241022161704234"></p>
-<h1 id="开始测试"><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h1><ol>
+<h2 id="开始测试"><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h2><ol>
 <li>打开windows版微信，点开任意小程序，测试抓包情况。</li>
 </ol>
 <p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022163503164.png" alt="image-20241022163503164"></p>
@@ -353,7 +353,7 @@
 <li>打开burpsuite。切换到“Proxy”选项卡中的“HTTP history”选项卡，可以看到成功抓到小程序数据包。</li>
 </ol>
 <p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022163156601.png" alt="image-20241022163156601"></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><ol>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ol>
 <li>关于不能抓到https数据包的问题。访问：<a target="_blank" rel="noopener" href="http://burp/">burp证书下载地址</a>下载证书，并导入“受信任的根证书颁发机构”，可以用“mmc”控制台管理单元添加，相关细节不再赘述。</li>
 <li>关于能否用“Proxifier”抓取安卓模拟器数据包，还在测试。</li>
 </ol>
