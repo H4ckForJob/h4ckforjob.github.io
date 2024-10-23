@@ -336,62 +336,23 @@
       
         
           
-            <h2 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h2><ol>
-<li>系统Microsoft Windows [版本 10.0.19045.5011]</li>
-<li>微信 [版本 3.9.11.25]</li>
-<li>proxifier [版本 4.03 x64]</li>
-<li>burpsuite[版本 Professional 2024.8.4]</li>
-<li>everything</li>
-</ol>
-<h2 id="测试环境搭建"><a href="#测试环境搭建" class="headerlink" title="测试环境搭建"></a>测试环境搭建</h2><ol>
-<li>安装好微信。<a target="_blank" rel="noopener" href="https://pc.weixin.qq.com/">微信下载地址</a></li>
-<li>安装好proxifier，输入激活码：CLOT5-J3GYK-VGPYE-BDPMN-WKWMU（也可以用注册机自己生成：<a target="_blank" rel="noopener" href="https://github.com/y9nhjy/Proxifier-Keygen">注册机下载地址</a>）</li>
-<li>安装burpsuite，<a target="_blank" rel="noopener" href="https://portswigger.net/burp/releases">burpsuite下载地址</a>，<a target="_blank" rel="noopener" href="https://github.com/h3110w0r1d-y/BurpLoaderKeygen">注册机下载地址</a>。安装及破解详细教学地址：<a target="_blank" rel="noopener" href="https://www.sqlsec.com/2020/10/winbp.html">burpsuite安装及破解</a></li>
-</ol>
-<h2 id="配置proxifier"><a href="#配置proxifier" class="headerlink" title="配置proxifier"></a>配置proxifier</h2><ol>
-<li>配置代理服务器为burpsuite，进入proxifier，找到如下选项</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022155637177.png" alt="image-20241022155637177"></p>
-<ol start="2">
-<li>点击“add”添加“Proxy Server”</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022155940152.png" alt="image-20241022155940152"></p>
-<ol start="3">
-<li>本文章，默认您的burpsuite开启监听的端口是127.0.0.1:8080，所以添加server配置如下图：</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022160216298.png" alt="image-20241022160216298"></p>
-<ol start="4">
-<li>可以点击下方“Check”按钮，确认代理服务器是否能成功连通。</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022160514252.png" alt="image-20241022160514252"></p>
-<p>如果连通，则显示绿色“Proxy is ready to work with Proxifier!”，如下图。</p>
-<p><strong>注意：默认测试连通访问的是<a href="www.google.com">谷歌</a>，如果您未进行科学上网，可能会测试连通性失败，请在右上角“Test Settings”处，改成<a href="www.baidu.com">百度</a></strong></p>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022160621456.png" alt="image-20241022160621456"></p>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022160915957.png" alt="image-20241022160915957"></p>
-<ol start="5">
-<li>配置代理规则，找到下图选项卡</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022161340939.png" alt="image-20241022161340939"></p>
-<ol start="6">
-<li>点击“Add”添加一条规则，“Applications”选择“wechatappex.exe”，这个程序是windows版微信小程序的exe，如果您不知道这个程序路径在哪里，可以使用everything程序进行全局搜索，<a target="_blank" rel="noopener" href="https://www.voidtools.com/zh-cn/">everything下载地址</a>。</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022162413616.png" alt="image-20241022162413616"></p>
-<p>“Action”选择我们之前创建好的代理服务器“Proxy HTTPS 127.0.0.1”</p>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022161758371.png" alt="image-20241022161758371"></p>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022161704234.png" alt="image-20241022161704234"></p>
-<h2 id="开始测试"><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h2><ol>
-<li><p>打开windows版微信，点开任意小程序，测试抓包情况。</p>
-</li>
-<li><p>打开burpsuite。切换到“Proxy”选项卡中的“HTTP history”选项卡，可以看到成功抓到小程序数据包。</p>
-</li>
-</ol>
-<p><img src="/../images/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/image-20241022163156601.png" alt="image-20241022163156601"></p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ol>
-<li>关于不能抓到https数据包的问题。访问：<a target="_blank" rel="noopener" href="http://burp/">burp证书下载地址</a>下载证书，并导入“受信任的根证书颁发机构”，可以用“mmc”控制台管理单元添加，相关细节不再赘述。</li>
-<li>关于能否用“Proxifier”抓取安卓模拟器数据包，还在测试。</li>
-</ol>
+          环境信息
+系统Microsoft Windows [版本 10.0.19045.5011]
+微信 [版本 3.9.11.25]
+proxifier [版本 4.03 x64]
+burpsuite[版本 Professional 2024.8.4]
+everything
 
-          
+测试环境搭建
+安装好微信。微
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2024/10/22/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -509,11 +470,18 @@
       
         
           
-            <h1 id="插入图片测试"><a href="#插入图片测试" class="headerlink" title="插入图片测试"></a>插入图片测试</h1><p><img src="/../images/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/hello.jpg" alt="hello"></p>
-<p>测试添加图片成功</p>
-<p>添加readme成功</p>
+          插入图片测试
+测试添加图片成功
+添加readme成功
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2024/10/22/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -631,23 +599,15 @@
       
         
           
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-          
+          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2024/10/22/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
