@@ -78,5 +78,47 @@
 <li>关于能否用“Proxifier”抓取安卓模拟器数据包，还在测试。</li>
 </ol>
 ]]></content>
+      <categories>
+        <category>渗透测试</category>
+      </categories>
+      <tags>
+        <tag>burp使用</tag>
+        <tag>小程序抓包</tag>
+        <tag>proxifier</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>My New Test Post</title>
+    <url>/2024/10/23/My-New-Test-Post/</url>
+    <content><![CDATA[<h2 id="中文跳转测试"><a href="#中文跳转测试" class="headerlink" title="中文跳转测试"></a>中文跳转测试</h2><h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>say something</p>
+<h3 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h3><p>hello world</p>
+<h3 id="test-2"><a href="#test-2" class="headerlink" title="test"></a>test</h3><p>say something</p>
+<h3 id="test-3"><a href="#test-3" class="headerlink" title="test"></a>test</h3><p>hello world</p>
+<h3 id="test-4"><a href="#test-4" class="headerlink" title="test"></a>test</h3><p>say something</p>
+<h3 id="test-5"><a href="#test-5" class="headerlink" title="test"></a>test</h3><p>hello world</p>
+<h2 id="test-jump-2"><a href="#test-jump-2" class="headerlink" title="test jump 2"></a>test jump 2</h2><h3 id="test-6"><a href="#test-6" class="headerlink" title="test"></a>test</h3><p>say something</p>
+<h3 id="test-7"><a href="#test-7" class="headerlink" title="test"></a>test</h3><p>hello world</p>
+<h3 id="test-8"><a href="#test-8" class="headerlink" title="test"></a>test</h3><p>say something</p>
+<h3 id="test-9"><a href="#test-9" class="headerlink" title="test"></a>test</h3><p>hello world</p>
+<h2 id="中文跳转测试-3"><a href="#中文跳转测试-3" class="headerlink" title="中文跳转测试 3"></a>中文跳转测试 3</h2><h3 id="test-10"><a href="#test-10" class="headerlink" title="test"></a>test</h3><p>say something</p>
+<h3 id="test-11"><a href="#test-11" class="headerlink" title="test"></a>test</h3><p>hello world</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>linux-screen命令使用详解</title>
+    <url>/2024/10/23/linux-screen%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="screen命令"><a href="#screen命令" class="headerlink" title="screen命令"></a>screen命令</h1><h2 id="创建一个新的窗口"><a href="#创建一个新的窗口" class="headerlink" title="创建一个新的窗口"></a>创建一个新的窗口</h2><p>screen -S test</p>
+<h2 id="列出所有窗口"><a href="#列出所有窗口" class="headerlink" title="列出所有窗口"></a>列出所有窗口</h2><p>screen -ls</p>
+<h2 id="重新回到窗口"><a href="#重新回到窗口" class="headerlink" title="重新回到窗口"></a>重新回到窗口</h2><p>screen -r test</p>
+<h2 id="清除dead会话"><a href="#清除dead会话" class="headerlink" title="清除dead会话"></a>清除dead会话</h2><p>screen -list会显示该会话为dead状态<br>使用screen -wipe命令清除该会话</p>
+<h2 id="远程detach某个session"><a href="#远程detach某个session" class="headerlink" title="远程detach某个session"></a>远程detach某个session</h2><p>screen -d test</p>
+<h2 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">screen [-AmRvx -ls -wipe][-d &lt;作业名称&gt;][-h &lt;行数&gt;][-r &lt;作业名称&gt;][-s ][-S &lt;作业名称&gt;]</span><br><span class="line"></span><br><span class="line">-A 　将所有的视窗都调整为目前终端机的大小。</span><br><span class="line">-d &lt;作业名称&gt; 　将指定的screen作业离线。</span><br><span class="line">-h &lt;行数&gt; 　指定视窗的缓冲区行数。</span><br><span class="line">-m 　即使目前已在作业中的screen作业，仍强制建立新的screen作业。</span><br><span class="line">-r &lt;作业名称&gt; 　恢复离线的screen作业。</span><br><span class="line">-R 　先试图恢复离线的作业。若找不到离线的作业，即建立新的screen作业。</span><br><span class="line">-s 　指定建立新视窗时，所要执行的shell。</span><br><span class="line">-S &lt;作业名称&gt; 　指定screen作业的名称。</span><br><span class="line">-v 　显示版本信息。</span><br><span class="line">-x 　恢复之前离线的screen作业。</span><br><span class="line">-ls或--list 　显示目前所有的screen作业。</span><br><span class="line">-wipe 　检查目前所有的screen作业，并删除已经无法使用的screen作业。</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>常用命令详解</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>screen</tag>
+      </tags>
   </entry>
 </search>
