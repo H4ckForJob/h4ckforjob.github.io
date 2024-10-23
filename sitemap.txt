@@ -1,3 +1,4 @@
+https://h4ckforjob.github.io/2024/10/23/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/
 https://h4ckforjob.github.io/2024/10/23/%E6%96%87%E6%9C%AC%E5%8E%BB%E9%87%8D%E5%A4%8D%E5%B0%8F%E5%B7%A5%E5%85%B7/
 https://h4ckforjob.github.io/2024/10/23/linux-screen%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/
 https://h4ckforjob.github.io/2024/10/22/%E4%B8%80%E7%A7%8D%E6%B5%8B%E8%AF%95%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%8A%93%E5%8C%85%E6%96%B9%E6%B3%95/
@@ -13,6 +14,9 @@ https://h4ckforjob.github.io/tags/linux/
 https://h4ckforjob.github.io/tags/screen/
 https://h4ckforjob.github.io/tags/%E5%B0%8F%E5%B7%A5%E5%85%B7/
 https://h4ckforjob.github.io/tags/%E5%8E%BB%E9%87%8D%E5%A4%8D/
+https://h4ckforjob.github.io/tags/hexo/
+https://h4ckforjob.github.io/tags/next/
 https://h4ckforjob.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/
 https://h4ckforjob.github.io/categories/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/
 https://h4ckforjob.github.io/categories/web%E5%B7%A5%E5%85%B7/
+https://h4ckforjob.github.io/categories/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E7%9B%B8%E5%85%B3/

@@ -117,4 +117,32 @@
         <tag>去重复</tag>
       </tags>
   </entry>
+  <entry>
+    <title>hexo-next主题文章浏览次数添加单位</title>
+    <url>/2024/10/23/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/</url>
+    <content><![CDATA[<h2 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h2><ol>
+<li>hexo版本：7.3.0</li>
+<li>next版本：5.1.4</li>
+</ol>
+<h2 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h2><p>实现浏览次数的单位显示，效果如图</p>
+<p><img src="/../images/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/image-20241023171312372.png" alt="image-20241023171312372"></p>
+<h2 id="定位前端代码"><a href="#定位前端代码" class="headerlink" title="定位前端代码"></a>定位前端代码</h2><p>在浏览器中，同时按下Ctrl+Shift+c，选择前端图标元素，找到关键字。</p>
+<p><img src="/../images/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/image-20241023171557749.png" alt="image-20241023171557749"></p>
+<p>可以看到关键字是“fa fa-file-o”</p>
+<p>在博客根目录搜索关键字，推荐使用vs code打开博客项目搜索，搜索结果如图。</p>
+<p><img src="/../images/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/image-20241023171748595.png" alt="image-20241023171748595"></p>
+<p>可以了解到页面统计是“page_pv_header”变量控制的。继续搜索“page_pv_header”变量。</p>
+<p><img src="/../images/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/image-20241023171906996.png" alt="image-20241023171906996"></p>
+<p>找到最终代码在“post.swig”文件中。</p>
+<h2 id="实现单位添加"><a href="#实现单位添加" class="headerlink" title="实现单位添加"></a>实现单位添加</h2><p>修改<code>&lt;span class=&quot;busuanzi-value&quot; id=&quot;busuanzi_value_page_pv&quot; &gt;&lt;/span&gt;</code>代码段前后。就可以实现文章浏览次数单位的添加。</p>
+<p><img src="/../images/hexo-next%E4%B8%BB%E9%A2%98%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E6%AC%A1%E6%95%B0%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BD%8D/image-20241023172059517.png" alt="image-20241023172059517"></p>
+]]></content>
+      <categories>
+        <category>hexo博客搭建相关</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
 </search>
