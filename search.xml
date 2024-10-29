@@ -145,4 +145,69 @@
         <tag>next</tag>
       </tags>
   </entry>
+  <entry>
+    <title>thinkphp5框架学习-访问自定义方法</title>
+    <url>/2024/10/29/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><ol>
+<li>安装phpstudy，版本8.1.1.2，启动Apache2.4.39。</li>
+<li>安装composer1.8.5。</li>
+</ol>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029155119237.png" alt="image-20241029155119237"></p>
+<ol start="3">
+<li>配置系统环境变量。当前php路径：D:\phpstudy_pro\Extensions\php\php5.5.9nts\php.exe，当前composer路径：D:\phpstudy_pro\Extensions\composer1.8.5\composer.bat</li>
+</ol>
+<p>因此添加以下两个路径到系统环境变量，这样就能在cmd中执行composer命令了<br><code>D:\phpstudy_pro\Extensions\php\php5.5.9nts\</code><br><code>D:\phpstudy_pro\Extensions\composer1.8.5\</code></p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029160426862.png" alt="image-20241029160426862"></p>
+<ol start="4">
+<li>composer全局配置阿里云源。执行以下命令换源。</li>
+</ol>
+<p><code>composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/</code></p>
+<ol start="5">
+<li>使用composer安装thinkphp5框架。</li>
+</ol>
+<p>cd到phpstudy的web根目录。我的web根目录是D:\phpstudy_pro\WWW</p>
+<p>执行以下命令开始安装，并将框架目录名命名为think_composer。</p>
+<p><code>composer create-project --prefer-dist topthink/think think_composer</code></p>
+<p>安装成功的话，应该如图所示。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029161101169.png" alt="image-20241029161101169"></p>
+<h2 id="测试访问"><a href="#测试访问" class="headerlink" title="测试访问"></a>测试访问</h2><p>访问<a href="http://localhost/think_composer/public/">http://localhost/think_composer&#x2F;public&#x2F;</a>如果一切配置正常，你会看到如下图界面。其中public文件夹为thinkphp5的web根目录。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029161258968.png" alt="image-20241029161258968"></p>
+<h2 id="添加自定义方法"><a href="#添加自定义方法" class="headerlink" title="添加自定义方法"></a>添加自定义方法</h2><p>那么如何添加自定义的方法呢？</p>
+<p>测试修改代码，在application目录下，找到控制器index，添加test方法。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">phpinfo</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的意思是访问到test方法，就返回phpinfo信息。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029161818286.png" alt="image-20241029161818286"></p>
+<h2 id="访问自定义方法"><a href="#访问自定义方法" class="headerlink" title="访问自定义方法"></a>访问自定义方法</h2><p>接下来就是访问自定义方法。</p>
+<p>可以通过以下路径访问到自定义方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost/think_composer/public/index.php?s=/index/index/test</span><br><span class="line">http://localhost/think_composer/public/index.php/index/index/test</span><br></pre></td></tr></table></figure>
+
+<p>成功访问，如图所示。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029162329771.png" alt="image-20241029162329771"></p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029162436115.png" alt="image-20241029162436115"></p>
+<h2 id="未解决的问题"><a href="#未解决的问题" class="headerlink" title="未解决的问题"></a>未解决的问题</h2><h3 id="问题一：访问不到自定义方法。"><a href="#问题一：访问不到自定义方法。" class="headerlink" title="问题一：访问不到自定义方法。"></a>问题一：访问不到自定义方法。</h3><p>通过以下路径访问不到自定义方法。返回<code>No input file specified.</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost/think_composer/public/index/index/index/test</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029162729018.png" alt="image-20241029162729018"></p>
+<p>猜测的原因是未正确配置<code>.htaccess</code>文件。我当前的配置内容为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;IfModule mod_rewrite.c&gt;</span><br><span class="line">  Options +FollowSymlinks -Multiviews</span><br><span class="line">  RewriteEngine On</span><br><span class="line"></span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-d</span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-f</span><br><span class="line">  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure>
+<p>搜索出来的文章说可能有两个原因。1.路由配置问题。2.thinkphp框架解析路径出现问题。<a href="https://blog.csdn.net/qq5201314wx/article/details/118540380">https://blog.csdn.net/qq5201314wx/article/details/118540380</a></p>
+<h3 id="问题二：访问不到其他控制器的方法"><a href="#问题二：访问不到其他控制器的方法" class="headerlink" title="问题二：访问不到其他控制器的方法"></a>问题二：访问不到其他控制器的方法</h3><p>创建admin控制器，添加index方法。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029164054888.png" alt="image-20241029164054888"></p>
+<p>预期结果是访问以下两个路径，返回”this is admin Index index“。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost/think_composer/public/index.php?s=/admin/index/index</span><br><span class="line">http://localhost/think_composer/public/index.php/admin/index/index</span><br></pre></td></tr></table></figure>
+
+<p>但实际访问报错如图。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029164430785.png" alt="image-20241029164430785"></p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029164454118.png" alt="image-20241029164454118"></p>
+<p>目前还没找到原因，先继续学习thinkphp5框架后续课程了。</p>
+]]></content>
+      <categories>
+        <category>php开发</category>
+      </categories>
+      <tags>
+        <tag>thinkphp5</tag>
+        <tag>php</tag>
+      </tags>
+  </entry>
 </search>
