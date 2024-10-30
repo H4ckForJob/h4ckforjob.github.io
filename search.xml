@@ -192,6 +192,16 @@
 <p>猜测的原因是未正确配置<code>.htaccess</code>文件。我当前的配置内容为：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;IfModule mod_rewrite.c&gt;</span><br><span class="line">  Options +FollowSymlinks -Multiviews</span><br><span class="line">  RewriteEngine On</span><br><span class="line"></span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-d</span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-f</span><br><span class="line">  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure>
 <p>搜索出来的文章说可能有两个原因。1.路由配置问题。2.thinkphp框架解析路径出现问题。<a href="https://blog.csdn.net/qq5201314wx/article/details/118540380">https://blog.csdn.net/qq5201314wx/article/details/118540380</a></p>
+<p>慕课网用户给出的解决方案</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">需要设置你的站点伪静态，打开public-.htaccess</span><br><span class="line"></span><br><span class="line">把：RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]</span><br><span class="line"></span><br><span class="line">改成：RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]</span><br><span class="line"></span><br><span class="line">就可以了</span><br></pre></td></tr></table></figure>
+
+<p>尝试修改配置之后还是返回<code>No input file specified.</code>。</p>
+<p>最后修改配置成：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;IfModule mod_rewrite.c&gt;</span><br><span class="line">  Options +FollowSymlinks -Multiviews</span><br><span class="line">  RewriteEngine On</span><br><span class="line"></span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-d</span><br><span class="line">  RewriteCond %&#123;REQUEST_FILENAME&#125; !-f</span><br><span class="line">  RewriteRule ^(.*)$ index.php?s=/$1 [QSA,PT,L]</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure>
+
+<p>再访问<code>http://localhost/think_composer/public/index/index/index</code>就正常了</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241030143845017.png" alt="image-20241030143845017"></p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241030143920299.png" alt="image-20241030143920299"></p>
 <h3 id="问题二：访问不到其他控制器的方法"><a href="#问题二：访问不到其他控制器的方法" class="headerlink" title="问题二：访问不到其他控制器的方法"></a>问题二：访问不到其他控制器的方法</h3><p>创建admin控制器，添加index方法。</p>
 <p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029164054888.png" alt="image-20241029164054888"></p>
 <p>预期结果是访问以下两个路径，返回”this is admin Index index“。</p>
@@ -201,6 +211,12 @@
 <p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029164430785.png" alt="image-20241029164430785"></p>
 <p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029164454118.png" alt="image-20241029164454118"></p>
 <p>目前还没找到原因，先继续学习thinkphp5框架后续课程了。</p>
+<p>更新，发现原来是Index.php的i没大写，导致找不到控制器。</p>
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029180500309.png" alt="image-20241029180500309"></p>
+<p>现在访问以下路径，能看到”this is admin Index index“了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://localhost/think_composer/public/index.php?s=/admin/index/index</span><br><span class="line">http://localhost/think_composer/public/index.php/admin/index/index</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/thinkphp5%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-%E8%AE%BF%E9%97%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95/image-20241029180843357.png" alt="image-20241029180843357"></p>
 ]]></content>
       <categories>
         <category>php开发</category>
