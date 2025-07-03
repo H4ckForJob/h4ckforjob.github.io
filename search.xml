@@ -285,6 +285,11 @@
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">杀软查杀日志</span><br></pre></td></tr></table></figure>
 
+<ol start="6">
+<li>用户目录下是否有可疑文件（时间排序）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; %UserProfile%\Recent</span><br><span class="line">C:\Documents and Settings\Administrator\Recent</span><br><span class="line">C:\Documents and Settings\Default User\Recent</span><br><span class="line">C:\windows\temp\</span><br></pre></td></tr></table></figure>
+
 <h2 id="账户分析"><a href="#账户分析" class="headerlink" title="账户分析"></a>账户分析</h2><ol>
 <li>访谈管理员，是否存在弱口令，是否开启3389rdp</li>
 </ol>
@@ -334,6 +339,9 @@
 <li>查看目前的网络连接，定位可疑的ESTABLISHED，处于监听状态的端口</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr &quot;端口号&quot;</span><br></pre></td></tr></table></figure>
+
+<p>连接状态解释：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CLOSED：无连接活动或正在进行</span><br><span class="line">LISTEN：监听中等待连接</span><br><span class="line">SYN_RECV：服务端接收了SYN</span><br><span class="line">SYN_SENT：请求连接等待确认</span><br><span class="line">ESTABLISHED：连接建立数据传输</span><br><span class="line">FIN_WAIT1：请求中止连接，等待对方FIN</span><br><span class="line">FIN_WAIT2：同意中止，请稍候</span><br><span class="line">ITMED_WAIT：等待所有分组死掉</span><br><span class="line">CLOSING：两边同时尝试关闭</span><br><span class="line">TIME_WAIT：另一边已初始化一个释放</span><br><span class="line">LAST_ACK：等待原来的发向远程TCP的连接中断请求的确认</span><br><span class="line">CLOSE-WAIT：等待关闭连接</span><br></pre></td></tr></table></figure>
 
 <ol start="2">
 <li>查看网络连接对应的进程（管理员权限打开powershell执行）</li>
@@ -393,7 +401,44 @@
 <ol start="6">
 <li>查看是否存在异常的域名-IP映射</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">C:\Windows\System32\drivers\etc\hosts</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">C:\Windows\System32\drivers\etc\hosts</span><br></pre></td></tr></table></figure>
+
+<h2 id="日志查看分析"><a href="#日志查看分析" class="headerlink" title="日志查看分析"></a>日志查看分析</h2><ol>
+<li>安全日志查看</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; eventvwr.msc &gt; Windows日志 &gt; 安全</span><br><span class="line">登录成功：事件ID为4624、528</span><br><span class="line">登录失败：事件ID为4625、529</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://learn.microsoft.com/zh-cn/windows-server/identity/ad-ds/plan/appendix-l--events-to-monitor">事件id详解</a></p>
+<h2 id="启动项排查"><a href="#启动项排查" class="headerlink" title="启动项排查"></a>启动项排查</h2><ol>
+<li>自带启动项排查</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; msconfig-启动</span><br><span class="line">【开始】-【所有程序】-【启动】</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>注册表启动项排查</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; regedit检查以下项</span><br><span class="line">HKEY_CURRENT_USER\software\micorsoft\windows\currentversion\run</span><br><span class="line">HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run</span><br><span class="line">HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Runonce</span><br></pre></td></tr></table></figure>
+
+<h2 id="计划任务排查"><a href="#计划任务排查" class="headerlink" title="计划任务排查"></a>计划任务排查</h2><ol>
+<li>图形化界面检查计划任务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">【开始】&gt;【设置】&gt;【控制面板】&gt;【任务计划】</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>命令行检查计划任务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">旧版本系统使用：at</span><br><span class="line">新系统使用：schtasks</span><br></pre></td></tr></table></figure>
+
+<h2 id="服务排查"><a href="#服务排查" class="headerlink" title="服务排查"></a>服务排查</h2><ol>
+<li>图形化界面排查服务<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; services.msc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ol>
+<li>定位文件路径，关键字搜索（在d盘下搜索文件名包含test的文件）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for /r d:\ %i in (test) do @echo %i</span><br></pre></td></tr></table></figure>
+
+<p>2 . 查找包含关键字的文件（搜索包含test的.txt文件）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">findstr /s /m /I &quot;test&quot; *.txt</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>应急响应</category>
       </categories>
