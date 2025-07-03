@@ -430,8 +430,10 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">旧版本系统使用：at</span><br><span class="line">新系统使用：schtasks</span><br></pre></td></tr></table></figure>
 
 <h2 id="服务排查"><a href="#服务排查" class="headerlink" title="服务排查"></a>服务排查</h2><ol>
-<li>图形化界面排查服务<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; services.msc</span><br></pre></td></tr></table></figure></li>
+<li>图形化界面排查服务</li>
 </ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; services.msc</span><br></pre></td></tr></table></figure>
+
 <h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ol>
 <li>定位文件路径，关键字搜索（在d盘下搜索文件名包含test的文件）</li>
 </ol>
