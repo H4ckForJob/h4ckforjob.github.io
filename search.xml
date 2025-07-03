@@ -295,7 +295,105 @@
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">我的电脑-&gt;右键-&gt;管理-&gt;本地用户和组-&gt;用户</span><br><span class="line">WIN+R &gt; lusrmgr.msc</span><br></pre></td></tr></table></figure>
 
-]]></content>
+<ol start="3">
+<li>查看登录情况</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">qwinsta</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看当前登录账户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">query user</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看服务器账号</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">net user</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看本地管理员</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">net localgroup administrators</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看本地用户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wmic UserAccount get name</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>通过注册表查看账户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SAM\SAM\Domains\Account\Users\Names</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>排查该目录下是否存在新建用户目录，如果存在，则重点排查download和desktop目录是否有可疑文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">C:\Users\&#123;UserName&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="网络分析"><a href="#网络分析" class="headerlink" title="网络分析"></a>网络分析</h2><ol>
+<li>查看目前的网络连接，定位可疑的ESTABLISHED，处于监听状态的端口</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr &quot;端口号&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看网络连接对应的进程（管理员权限打开powershell执行）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat /b</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看路由信息</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat -rn</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>根据netstat定位出的PID，进行进程定位</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tasklist | findstr &#123;PID&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看防火墙策略（高版本不支持）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netsh firewall show all</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看防火墙策略</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netsh advfirewall firewall show rule name=all dir=in type=dynamic</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看DNS解析记录，是否存在可疑 的DNS解析</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipconfig /displaydns</span><br></pre></td></tr></table></figure>
+
+<h2 id="进程分析"><a href="#进程分析" class="headerlink" title="进程分析"></a>进程分析</h2><ol>
+<li>查看运行程序（或进程）的命令行参数</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wmic process get caption,commandline /value</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查询指定进程的命令行参数</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wmic process where caption=&quot;xxx.exe&quot; get caption,commandline /value</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看服务与进程对应关系</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tasklist /svc</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看进程与dll关系</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tasklist -M</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看哪些进程调用了指定的dll文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tasklist -m &#123;xxx.dll&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看是否存在异常的域名-IP映射</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">C:\Windows\System32\drivers\etc\hosts</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>应急响应</category>
       </categories>
