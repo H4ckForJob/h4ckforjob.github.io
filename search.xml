@@ -437,7 +437,9 @@
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for /r d:\ %i in (test) do @echo %i</span><br></pre></td></tr></table></figure>
 
-<p>2 . 查找包含关键字的文件（搜索包含test的.txt文件）</p>
+<ol start="2">
+<li>查找包含关键字的文件（搜索包含test的.txt文件）</li>
+</ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">findstr /s /m /I &quot;test&quot; *.txt</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>应急响应</category>
