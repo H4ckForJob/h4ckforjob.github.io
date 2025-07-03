@@ -245,4 +245,63 @@
         <tag>c盘扩容</tag>
       </tags>
   </entry>
+  <entry>
+    <title>应急响应-Linux场景checklist</title>
+    <url>/2025/07/04/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Linux%E5%9C%BA%E6%99%AFchecklist/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>应急响应</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>应急</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>应急响应-Windows场景checklist</title>
+    <url>/2025/07/04/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E5%9C%BA%E6%99%AFchecklist/</url>
+    <content><![CDATA[<h2 id="系统状态分析"><a href="#系统状态分析" class="headerlink" title="系统状态分析"></a>系统状态分析</h2><ol>
+<li>检查是否存在CPU&#x2F;内存&#x2F;网络爆满的情况</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; taskmgr</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看系统版本信息及补丁信息</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systeminfo</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看计算机详细信息</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msinfo32</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看系统变量设置</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>如果恶意程序已经被查杀，可以在杀软查杀日志中发现</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">杀软查杀日志</span><br></pre></td></tr></table></figure>
+
+<h2 id="账户分析"><a href="#账户分析" class="headerlink" title="账户分析"></a>账户分析</h2><ol>
+<li>访谈管理员，是否存在弱口令，是否开启3389rdp</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">弱口令排查</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看本地用户和组，是否存在可疑账号、新增账号</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">我的电脑-&gt;右键-&gt;管理-&gt;本地用户和组-&gt;用户</span><br><span class="line">WIN+R &gt; lusrmgr.msc</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>应急响应</category>
+      </categories>
+      <tags>
+        <tag>应急</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
 </search>
