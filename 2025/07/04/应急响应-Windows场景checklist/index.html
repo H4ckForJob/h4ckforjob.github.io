@@ -87,7 +87,7 @@
 <meta property="og:description" content="系统状态分析 检查是否存在CPU&#x2F;内存&#x2F;网络爆满的情况  1WIN+R &gt; taskmgr   查看系统版本信息及补丁信息  1systeminfo   查看计算机详细信息  1msinfo32   查看系统变量设置  1set   如果恶意程序已经被查杀，可以在杀软查杀日志中发现  1杀软查杀日志   用户目录下是否有可疑文件（时间排序）  1234WIN+R &gt;">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-07-03T21:29:48.000Z">
-<meta property="article:modified_time" content="2025-07-03T23:00:46.874Z">
+<meta property="article:modified_time" content="2025-07-03T23:18:12.704Z">
 <meta property="article:author" content="h4ckforjob">
 <meta property="article:tag" content="应急">
 <meta property="article:tag" content="Windows">
@@ -396,7 +396,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  923 字
+                  1k 字
                 </span>
               
 
@@ -412,7 +412,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  4 分钟
                 </span>
               
             </div>
@@ -616,6 +616,11 @@
 <li>查找包含关键字的文件（搜索包含test的.txt文件）</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">findstr /s /m /I &quot;test&quot; *.txt</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>搜索<code>*.txt</code>文件中test关键字所在的行</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">findstr /i /n &quot;test&quot; *.txt</span><br><span class="line">/i:忽略大小写。</span><br><span class="line">/n:在输出中显示行号。</span><br><span class="line">/c:&quot;string&quot;：指定要搜索的字符串。</span><br><span class="line">/s:在当前目录及其所有子目录中递归搜索匹配的文件。</span><br><span class="line">/m:只列出包含匹配关键字的文件名，而不是列出匹配的行。</span><br></pre></td></tr></table></figure>
       
     </div>
     

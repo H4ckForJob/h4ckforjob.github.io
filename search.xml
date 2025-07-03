@@ -442,7 +442,12 @@
 <ol start="2">
 <li>查找包含关键字的文件（搜索包含test的.txt文件）</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">findstr /s /m /I &quot;test&quot; *.txt</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">findstr /s /m /I &quot;test&quot; *.txt</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>搜索<code>*.txt</code>文件中test关键字所在的行</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">findstr /i /n &quot;test&quot; *.txt</span><br><span class="line">/i:忽略大小写。</span><br><span class="line">/n:在输出中显示行号。</span><br><span class="line">/c:&quot;string&quot;：指定要搜索的字符串。</span><br><span class="line">/s:在当前目录及其所有子目录中递归搜索匹配的文件。</span><br><span class="line">/m:只列出包含匹配关键字的文件名，而不是列出匹配的行。</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>应急响应</category>
       </categories>
