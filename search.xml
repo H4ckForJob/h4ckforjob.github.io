@@ -248,7 +248,322 @@
   <entry>
     <title>应急响应-Linux场景checklist</title>
     <url>/2025/07/04/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Linux%E5%9C%BA%E6%99%AFchecklist/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h2 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h2><ol>
+<li>创建临时目录，存储分析记录</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /tmp/work/</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>打包日志文件，防止后续操作覆盖</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo tar -zcvf /tmp/work/log.tar.gz /var/log/</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>备份历史命令再进行分析，防止覆盖（显示命令执行时间）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export HISTTIMEFORMAT=&#x27;%F %T &#x27; ;history &gt; /tmp/work/history.txt</span><br><span class="line">cat /root/.bash_history &gt; /tmp/work/bash_history.txt</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>将本地工具包拷贝至远程机器&#x2F;tmp&#x2F;work&#x2F;路径下</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scp -r /local/tool.zip root@192.168.1.1:/tmp/work/</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>将远程机器文件下载到本地的&#x2F;tmp&#x2F;work&#x2F;路径下</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">scp -P 22 root@192.168.1.1:/tmp/work/log.tar.gz /tmp/work/</span><br></pre></td></tr></table></figure>
+
+<h2 id="命令篡改分析"><a href="#命令篡改分析" class="headerlink" title="命令篡改分析"></a>命令篡改分析</h2><ol>
+<li>检查是否有恶意命令设置了别名</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alias</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>检查系统完整性，系统命令是否被替换（重点关注S、5、T）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rpm -Va</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rpm -Va 的输出结果通常包含一些特殊字符，用于指示文件的哪些属性发生了变化：</span><br><span class="line">S：文件大小发生变化。</span><br><span class="line">M：文件的权限发生变化。</span><br><span class="line">5：文件的 MD5 校验和发生变化。</span><br><span class="line">D：设备号发生变化。</span><br><span class="line">L：符号链接的目标发生变化。</span><br><span class="line">U：文件所有者发生变化。</span><br><span class="line">G：文件所属组发生变化。</span><br><span class="line">T：文件的修改时间发生变化。</span><br><span class="line">P：文件的权限发生变化（另一种表示方式）。</span><br><span class="line">例如，输出结果 S.5....T 表示文件的大小、MD5 校验和和修改时间发生了变化。</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看命令目录最近的时间排序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -alt /usr/bin | head -10</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>根据确定时间去匹配被篡改的命令</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -al /bin/ /usr/bin/ /usr/sbin/ /sbin/ | grep &quot;Aug 25&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看top命令是否有预加载的动态链接库文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldd `which top`</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>跟踪命令的系统调用（需要安装strace工具）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">strace -f cat</span><br></pre></td></tr></table></figure>
+
+<h2 id="网络分析"><a href="#网络分析" class="headerlink" title="网络分析"></a>网络分析</h2><ol>
+<li>查看当前系统所有的tcp&#x2F;udp连接</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat -pantu</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看当前系统监听的tcp&#x2F;udp端口的进程</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat -tulnp</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看是否存在异常的域名-IP映射</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看所有防火墙规则，是否存在业务范围之外的可疑地址和端口</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iptables -vnL</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>全量抓取系统当前网络流量</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tcpdump -w /tmp/work/flow.pcap</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看当前通信的连接总数</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netstat -an | grep ESTABLISHED | wc -l</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wc命令参数解释：</span><br><span class="line">-l 或 --lines	统计文件中的行数。</span><br></pre></td></tr></table></figure>
+
+<h2 id="进程分析"><a href="#进程分析" class="headerlink" title="进程分析"></a>进程分析</h2><ol>
+<li>查看系统运行状态，是否存在进程占用CPU过大</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">top -c</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数详解</span><br><span class="line">-c：显示完整的命令行参数。</span><br><span class="line">如果不使用 -c，COMMAND 列只会显示进程的名称。</span><br><span class="line">使用 -c 后，COMMAND 列会显示完整的命令行，这对于调试和监控特定进程的运行参数非常有用。</span><br><span class="line">-n：指定 top 运行的次数。</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>根据进程名或字符串获取PID</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pidof &quot;关键字&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看当前系统运行的所有进程</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps -aux</span><br><span class="line">按照启动时间排序：</span><br><span class="line">ps -aux --sort=start_time</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数详解</span><br><span class="line">-a</span><br><span class="line">含义：显示当前终端（tty）上所有用户的进程，不包括其他终端的进程。</span><br><span class="line">作用：-a 选项使得 ps 命令不仅显示当前用户的进程，还显示其他用户在当前终端上运行的进程。</span><br><span class="line">-u</span><br><span class="line">含义：显示进程的用户（所有者）信息。</span><br><span class="line">作用：-u 选项使得 ps 命令显示进程的用户信息，包括用户名、进程的 CPU 使用率、内存使用率等。</span><br><span class="line">-x</span><br><span class="line">含义：显示没有控制终端的进程。</span><br><span class="line">作用：-x 选项使得 ps 命令能够显示那些没有控制终端（tty）的进程，例如后台运行的守护进程或通过 nohup 启动的进程。</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看当前系统运行的进程，及父子进程关系</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps -auxef</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数详解</span><br><span class="line">-e 参数</span><br><span class="line">含义：显示系统中所有进程，不受终端（tty）的限制。</span><br><span class="line">作用：-e 选项使得 ps 命令能够列出系统中所有用户的进程，而不仅仅是当前终端或当前用户的进程。这包括后台进程、守护进程以及没有控制终端的进程。</span><br><span class="line">-f 参数</span><br><span class="line">含义：显示长格式的进程信息。</span><br><span class="line">作用：-f 选项使得 ps 命令显示更详细的进程信息，包括父进程 ID（PPID）、进程的启动时间、运行时间等。这有助于更全面地了解进程的上下文和行为。</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看进程树查看进程-线程对应关系</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pstree -acU</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数详解</span><br><span class="line">-a 参数</span><br><span class="line">含义：显示每个进程的完整命令行参数。</span><br><span class="line">作用：默认情况下，pstree 只显示进程的名称。使用 -a 参数后，它会显示每个进程的完整命令行参数，这对于调试和监控特定进程的运行参数非常有用。</span><br><span class="line">-c 参数</span><br><span class="line">含义：不合并相同的进程。</span><br><span class="line">作用：在某些情况下，多个进程可能具有相同的名称或命令行参数。使用 -c 参数后，pstree 会将这些进程分别显示，而不是合并显示。</span><br><span class="line">-U 参数</span><br><span class="line">含义：显示进程的用户（所有者）信息。</span><br><span class="line">作用：使用 -U 参数后，pstree 会在每个进程的名称前显示其所有者的用户名。这对于识别哪些用户启动了哪些进程非常有用。</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看CPU占用前10的进程</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head -n 11</span><br><span class="line">ps -aux --sort=-%cpu | head -11</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看内存占用前10 的进程</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps -eo pid,ppid,cmd,%mem --sort=-%mem | head -n 11</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">-e：显示所有进程。</span><br><span class="line">-o：自定义输出格式，pid 是进程 ID，ppid 是父进程 ID，cmd 是命令行，%mem 是内存使用率（以百分比表示）。</span><br><span class="line">--sort=-%mem：按内存使用率降序排序。</span><br><span class="line">head -n 11：显示前 11 行（第 1 行是标题行，接下来是前 10 个进程）。</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>查看进程的行为</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">strace -f -p pid</span><br></pre></td></tr></table></figure>
+
+<h2 id="隐藏进程分析"><a href="#隐藏进程分析" class="headerlink" title="隐藏进程分析"></a>隐藏进程分析</h2><ol>
+<li>通过对比ps显示的进程ID与proc目录文件的差异性来发现隐藏进程</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps -ef | awk &#x27;&#123;print$2&#125;&#x27; | sort -n | uniq &gt; 1</span><br><span class="line">ls /proc | sort -n | uniq &gt; 2</span><br></pre></td></tr></table></figure>
+
+<p>shell脚本实现</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line"># 获取 ps 命令列出的所有 PID</span><br><span class="line">PS_PIDS=$(ps -eo pid | awk &#x27;NR &gt; 1 &#123;print $1&#125;&#x27;)</span><br><span class="line"></span><br><span class="line"># 获取 /proc 目录中的所有 PID</span><br><span class="line">PROC_PIDS=$(ls -1 /proc | grep &#x27;^[0-9]&#x27;)</span><br><span class="line"></span><br><span class="line"># 将两个列表转换为数组</span><br><span class="line">readarray -t PS_PIDS_ARRAY &lt;&lt;&lt; &quot;$PS_PIDS&quot;</span><br><span class="line">readarray -t PROC_PIDS_ARRAY &lt;&lt;&lt; &quot;$PROC_PIDS&quot;</span><br><span class="line"></span><br><span class="line"># 遍历 /proc 中的 PID，检查是否在 ps 的 PID 列表中</span><br><span class="line">for pid in &quot;$&#123;PROC_PIDS_ARRAY[@]&#125;&quot;; do</span><br><span class="line">    if [[ ! &quot; $&#123;PS_PIDS_ARRAY[@]&#125; &quot; =~ &quot; $&#123;pid&#125; &quot; ]]; then</span><br><span class="line">        echo &quot;隐藏进程 PID: $pid&quot;</span><br><span class="line">        echo &quot;进程信息:&quot;</span><br><span class="line">        cat /proc/$pid/status</span><br><span class="line">        echo &quot;------------------------&quot;</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h2 id="恶意程序定位"><a href="#恶意程序定位" class="headerlink" title="恶意程序定位"></a>恶意程序定位</h2><ol>
+<li>查看恶意进程对应的可执行程序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -l /proc/&#123;pid&#125;/exe</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果进程源文件被删除，可使用重定向从内存中恢复源文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /proc/&#123;pid&#125;/exe &gt; /tmp/work/test.bin</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看恶意进程启动命令</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /proc/&#123;pid&#125;/cmdline</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看恶意进程关联到的每个可执行文件和库文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /proc/&#123;pid&#125;/maps</span><br><span class="line">lsof -p &#123;pid&#125;</span><br><span class="line">ldd /proc/&#123;pid&#125;/exe</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看恶意进程环境变量，注意查看哪个用户启动，以及登录IP</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">strings /proc/&#123;pid&#125;/environ</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>获取进程启动时的所在路径（不一定是恶意文件所在路径）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pwdx &#123;pid&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看指定端口对应的程序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsof -i:&#123;port&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>查看与恶意进程关联的文件&#x2F;端口</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsof -f -p &#123;pid&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>查看指定文件名相关的进程信息</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsof -c 文件名</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>查看tmp目录下的可疑文件，特别是以点开头的隐藏文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -alt /tmp</span><br><span class="line">ls -alt /var/tmp</span><br><span class="line">ls -alt /dev/shm</span><br></pre></td></tr></table></figure>
+
+<h2 id="开机启动项分析"><a href="#开机启动项分析" class="headerlink" title="开机启动项分析"></a>开机启动项分析</h2><ol>
+<li>关注&#x2F;etc目录下的rc相关文件以及init相关目录及文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -altr /etc/init.d/</span><br><span class="line">cat /etc/inittab</span><br><span class="line">ls /etc/rc*.d/</span><br><span class="line">cat /etc/rc.local</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看开机自启动服务（Centos7 以前）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chkconfig --list</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看开机自启动服务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl list-unit-files | grep enabled</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看该目录下是否存在异常启动服务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/etc/systemd/system/</span><br><span class="line">/usr/lib/systemd/system</span><br><span class="line">/usr/lib/systemd/system/multi-user.target.wants</span><br></pre></td></tr></table></figure>
+
+<h2 id="计划任务分析"><a href="#计划任务分析" class="headerlink" title="计划任务分析"></a>计划任务分析</h2><ol>
+<li>查看一次性计划任务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">at -l</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看当前&#x2F;指定用户的crontab文件内容</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">crontab -l</span><br><span class="line">crontab -u username -l</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看定时任务的log记录，是否存在异常的定时任务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /var/log/cron</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看系统任务配置文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/crontab</span><br><span class="line">cat /etc/cron.d/</span><br><span class="line">ls -altr /etc/cron*</span><br><span class="line">ls -altr /var/spool/cron/</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看anacron定时任务</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/var/spool/anacron/*</span><br><span class="line">cat /etc/anacrontab</span><br></pre></td></tr></table></figure>
+
+<h2 id="账户分析"><a href="#账户分析" class="headerlink" title="账户分析"></a>账户分析</h2><ol>
+<li>查看所有用户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/passwd | cut -f 1 -d :</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看特权账户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">awk -F: &#x27;&#123;if($3==0)print $1&#125;&#x27; /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查询可以远程登录的账号</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo awk &#x27;/\$1|\$6/&#123;print $1&#125;&#x27; /etc/shadow</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查询能够登录的账户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/passwd | grep -E &quot;/bin/bash$&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查询具有sudo权限的账号</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo grep -E &#x27;^[^#]+ALL&#x27; /etc/sudoers | cut -d&#x27; &#x27; -f1</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看机器当前登录的全部用户</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">who</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看已经登录系统的用户列表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">w</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>所有用户的登录、注销信息，系统的启动、重启、关机事件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">last</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>错误登录</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lastb</span><br></pre></td></tr></table></figure>
+
+<ol start="10">
+<li>所有用户最近成功的登录事件和最后一次不成功的登录事件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lastlog</span><br></pre></td></tr></table></figure>
+
+<h2 id="异常文件分析"><a href="#异常文件分析" class="headerlink" title="异常文件分析"></a>异常文件分析</h2><ol>
+<li>排查临时目录是否存在可疑文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -alt /tmp/</span><br><span class="line">ls -alt /var/tmp/</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看文件是否被加锁</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsattr &#123;filename&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>给文件解锁</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lsattr -i &#123;filename&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看指定目录下文件时间的排序</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -alt | head -n 10</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看文件详细时间</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stat &#123;filename&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>应急响应</category>
       </categories>
@@ -434,7 +749,7 @@
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">WIN+R &gt; services.msc</span><br></pre></td></tr></table></figure>
 
-<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ol>
+<h2 id="杂项（快速定位文件）"><a href="#杂项（快速定位文件）" class="headerlink" title="杂项（快速定位文件）"></a>杂项（快速定位文件）</h2><ol>
 <li>定位文件路径，关键字搜索（在d盘下搜索文件名包含test的文件）</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for /r d:\ %i in (test) do @echo %i</span><br></pre></td></tr></table></figure>
