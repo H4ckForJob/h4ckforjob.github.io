@@ -87,7 +87,7 @@
 <meta property="og:description" content="数据备份 创建临时目录，存储分析记录  1mkdir &#x2F;tmp&#x2F;work&#x2F;   打包日志文件，防止后续操作覆盖  1sudo tar -zcvf &#x2F;tmp&#x2F;work&#x2F;log.tar.gz &#x2F;var&#x2F;log&#x2F;   备份历史命令再进行分析，防止覆盖（显示命令执行时间）  12export HISTTIMEFORMAT&#x3D;&#x27;%F %T &#x27; ;history &gt; &#x2F;tmp&#x2F;work">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-07-03T21:30:00.000Z">
-<meta property="article:modified_time" content="2025-07-07T17:50:33.629Z">
+<meta property="article:modified_time" content="2025-07-09T13:34:15.904Z">
 <meta property="article:author" content="h4ckforjob">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="应急">
@@ -396,7 +396,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.4k 字
+                  2.9k 字
                 </span>
               
 
@@ -412,7 +412,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9 分钟
+                  11 分钟
                 </span>
               
             </div>
@@ -749,6 +749,67 @@
 <li>查看文件详细时间</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stat &#123;filename&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>目录对比</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diff -r 目录1 目录2</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查找24小时内被修改的jsp文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/search -type f -name &quot;*.jsp&quot; -mtime -1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">/path/to/search：指定要搜索的目录路径。你可以将其替换为实际的目录路径，例如 /var/www/html 或 .（当前目录）。</span><br><span class="line">-type f：指定只查找文件（不包括目录）。</span><br><span class="line">-name &quot;*.jsp&quot;：指定只查找文件名以 .jsp 结尾的文件。</span><br><span class="line">-mtime -1：指定只查找在过去 24 小时内被修改的文件。-mtime -1 表示修改时间在过去 24 小时内。</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>查找一天之前，七天之内新增的文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/search -type f -mtime +1 -mtime -7</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">/path/to/search：指定要搜索的目录路径。你可以将其替换为实际的目录路径，例如 /var/www/html 或 .（当前目录）。</span><br><span class="line">-type f：指定只查找文件（不包括目录）。</span><br><span class="line">-mtime +1：指定文件的修改时间早于 24 小时。</span><br><span class="line">-mtime -7：指定文件的修改时间在过去 7 天内。</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>查找777权限的jsp文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /path/to/search -type f -name &quot;*.jsp&quot; -perm 777</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">/path/to/search：指定要搜索的目录路径。你可以将其替换为实际的目录路径，例如 /var/www/html 或 .（当前目录）。</span><br><span class="line">-type f：指定只查找文件（不包括目录）。</span><br><span class="line">-name &quot;*.jsp&quot;：指定只查找文件名以 .jsp 结尾的文件。</span><br><span class="line">-perm 777：指定查找权限为 777 的文件。</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他可疑项分析"><a href="#其他可疑项分析" class="headerlink" title="其他可疑项分析"></a>其他可疑项分析</h2><ol>
+<li>查看可疑DNS配置</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/resolv.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>通过关键字匹配文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -rn 关键字 /path</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看是否存在异常的域名IP映射</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看是否存在可疑的环境变量</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo $PATH</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看动态链接库是否被修改</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo $LD_PRELOAD</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看linux预加载库，是否被添加恶意so文件（该文件默认为空）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/ld.so.preload</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看可疑的用户库文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lib/*</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -920,7 +981,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD"><span class="nav-number">1.</span> <span class="nav-text">数据备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E7%AF%A1%E6%94%B9%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">命令篡改分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">网络分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">进程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">隐藏进程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E7%A8%8B%E5%BA%8F%E5%AE%9A%E4%BD%8D"><span class="nav-number">6.</span> <span class="nav-text">恶意程序定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%B9%E5%88%86%E6%9E%90"><span class="nav-number">7.</span> <span class="nav-text">开机启动项分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E5%88%86%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">计划任务分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%A6%E6%88%B7%E5%88%86%E6%9E%90"><span class="nav-number">9.</span> <span class="nav-text">账户分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90"><span class="nav-number">10.</span> <span class="nav-text">异常文件分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD"><span class="nav-number">1.</span> <span class="nav-text">数据备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E7%AF%A1%E6%94%B9%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">命令篡改分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">网络分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">进程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">隐藏进程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E7%A8%8B%E5%BA%8F%E5%AE%9A%E4%BD%8D"><span class="nav-number">6.</span> <span class="nav-text">恶意程序定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%B9%E5%88%86%E6%9E%90"><span class="nav-number">7.</span> <span class="nav-text">开机启动项分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E5%88%86%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">计划任务分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%A6%E6%88%B7%E5%88%86%E6%9E%90"><span class="nav-number">9.</span> <span class="nav-text">账户分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90"><span class="nav-number">10.</span> <span class="nav-text">异常文件分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8F%AF%E7%96%91%E9%A1%B9%E5%88%86%E6%9E%90"><span class="nav-number">11.</span> <span class="nav-text">其他可疑项分析</span></a></li></ol></div>
             
 
           </div>

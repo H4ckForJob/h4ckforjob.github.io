@@ -563,7 +563,68 @@
 <ol start="5">
 <li>查看文件详细时间</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stat &#123;filename&#125;</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stat &#123;filename&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>目录对比</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">diff -r 目录1 目录2</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查找24小时内被修改的jsp文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">find /path/to/search -type f -name &quot;*.jsp&quot; -mtime -1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">/path/to/search：指定要搜索的目录路径。你可以将其替换为实际的目录路径，例如 /var/www/html 或 .（当前目录）。</span><br><span class="line">-type f：指定只查找文件（不包括目录）。</span><br><span class="line">-name &quot;*.jsp&quot;：指定只查找文件名以 .jsp 结尾的文件。</span><br><span class="line">-mtime -1：指定只查找在过去 24 小时内被修改的文件。-mtime -1 表示修改时间在过去 24 小时内。</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>查找一天之前，七天之内新增的文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">find /path/to/search -type f -mtime +1 -mtime -7</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">/path/to/search：指定要搜索的目录路径。你可以将其替换为实际的目录路径，例如 /var/www/html 或 .（当前目录）。</span><br><span class="line">-type f：指定只查找文件（不包括目录）。</span><br><span class="line">-mtime +1：指定文件的修改时间早于 24 小时。</span><br><span class="line">-mtime -7：指定文件的修改时间在过去 7 天内。</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>查找777权限的jsp文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">find /path/to/search -type f -name &quot;*.jsp&quot; -perm 777</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">参数解释：</span><br><span class="line">/path/to/search：指定要搜索的目录路径。你可以将其替换为实际的目录路径，例如 /var/www/html 或 .（当前目录）。</span><br><span class="line">-type f：指定只查找文件（不包括目录）。</span><br><span class="line">-name &quot;*.jsp&quot;：指定只查找文件名以 .jsp 结尾的文件。</span><br><span class="line">-perm 777：指定查找权限为 777 的文件。</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他可疑项分析"><a href="#其他可疑项分析" class="headerlink" title="其他可疑项分析"></a>其他可疑项分析</h2><ol>
+<li>查看可疑DNS配置</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>通过关键字匹配文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grep -rn 关键字 /path</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看是否存在异常的域名IP映射</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>查看是否存在可疑的环境变量</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo $PATH</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看动态链接库是否被修改</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo $LD_PRELOAD</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看linux预加载库，是否被添加恶意so文件（该文件默认为空）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/ld.so.preload</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看可疑的用户库文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/usr/local/lib/*</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>应急响应</category>
       </categories>
