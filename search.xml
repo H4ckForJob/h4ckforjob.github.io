@@ -832,4 +832,91 @@
         <tag>Windows</tag>
       </tags>
   </entry>
+  <entry>
+    <title>病毒分析-分析doc宏病毒</title>
+    <url>/2025/07/29/%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90-%E5%88%86%E6%9E%90doc%E5%AE%8F%E7%97%85%E6%AF%92/</url>
+    <content><![CDATA[<h2 id="分析样本"><a href="#分析样本" class="headerlink" title="分析样本"></a>分析样本</h2><p>使用到python的oletools模块，输入以下命令进行模块安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">py -3 -m pip install  oletools</span><br></pre></td></tr></table></figure>
+
+<p>提取doc文档中的宏</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">olevba .\20250728151303PNpue9eq.doc</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90-%E5%88%86%E6%9E%90doc%E5%AE%8F%E7%97%85%E6%AF%92/image-20250729020721530.png" alt="image-20250729020721530"></p>
+<h2 id="分析宏"><a href="#分析宏" class="headerlink" title="分析宏"></a>分析宏</h2><p>询问ai，分析宏的功能</p>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>代码证据</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>自动触发</strong></td>
+<td><code>Document_Open()</code></td>
+<td>文档打开即执行。</td>
+</tr>
+<tr>
+<td><strong>隐藏痕迹</strong></td>
+<td><code>Application.DisplayStatusBar = False</code></td>
+<td>禁用状态栏，防止用户察觉。</td>
+</tr>
+<tr>
+<td><strong>关闭安全警告</strong></td>
+<td><code>Options.VirusProtection = False</code></td>
+<td>禁用宏安全提示。</td>
+</tr>
+<tr>
+<td><strong>感染模板</strong></td>
+<td><code>NormalTemplate.VBProject</code></td>
+<td>将病毒代码写入全局模板 <code>Normal.dot</code>，实现所有文档感染。</td>
+</tr>
+<tr>
+<td><strong>自我复制</strong></td>
+<td><code>MyCode = ... Lines(1, 20)</code> → <code>InsertLines 1, MyCode</code></td>
+<td>将自身代码复制到目标模板&#x2F;文档。</td>
+</tr>
+<tr>
+<td><strong>反调试</strong></td>
+<td><code>On Error Resume Next</code></td>
+<td>忽略错误，避免崩溃暴露。</td>
+</tr>
+</tbody></table>
+<h2 id="感染逻辑"><a href="#感染逻辑" class="headerlink" title="感染逻辑"></a>感染逻辑</h2><ol>
+<li>首次感染：<br>如果当前文档的宏代码前2行不是 ‘APMP 和 ‘KILL（标记），则删除目标模板&#x2F;文档的原有宏，并替换为病毒代码。</li>
+<li>持久化：<br>若病毒已驻留 Normal.dot，则所有新建&#x2F;打开的文档会被自动感染。</li>
+</ol>
+<h2 id="病毒类型"><a href="#病毒类型" class="headerlink" title="病毒类型"></a>病毒类型</h2><p>宏病毒：经典感染式，通过Office模板传播。</p>
+<p>无直接破坏性，但会污染所有文档，可能导致数据泄露或后续下载更危险的载荷。</p>
+<h2 id="处置建议"><a href="#处置建议" class="headerlink" title="处置建议"></a>处置建议</h2><ol>
+<li>立即隔离：</li>
+</ol>
+<ul>
+<li>在虚拟机中打开文件，避免传播。</li>
+</ul>
+<ol start="2">
+<li>清除病毒：</li>
+</ol>
+<ul>
+<li>删除 Normal.dot 中的恶意宏（%APPDATA%\Microsoft\Templates\Normal.dotm）。</li>
+<li>使用杀毒软件（如Windows Defender全盘扫描）。</li>
+</ul>
+<ol start="3">
+<li>修复文档：</li>
+</ol>
+<ul>
+<li>用 Office 的 “打开并修复” 功能清理残留宏。</li>
+</ul>
+<ol start="4">
+<li>防措施：</li>
+</ol>
+<ul>
+<li>启用 “禁用所有宏并发出通知”（文件 → 选项 → 信任中心）。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>病毒分析</tag>
+        <tag>宏病毒</tag>
+      </tags>
+  </entry>
 </search>
