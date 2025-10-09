@@ -1366,4 +1366,22 @@
         <tag>域渗透</tag>
       </tags>
   </entry>
+  <entry>
+    <title>kali配置清华源</title>
+    <url>/2025/10/09/kali%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%8E%E6%BA%90/</url>
+    <content><![CDATA[<h2 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h2><ol>
+<li>kali版本。kali-linux-2025.3-vmware-amd64</li>
+</ol>
+<h2 id="配置清华源"><a href="#配置清华源" class="headerlink" title="配置清华源"></a>配置清华源</h2><ol>
+<li>执行<code>sudo vim /etc/apt/sources.list</code>打开配置文件。按<code>i</code>执行编辑插入。</li>
+<li>复制源粘贴进去（按ctrl+shift+v粘贴）。<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free</span><br><span class="line">deb-src https://mirrors.tuna.tsinghua.edu.cn/kali kali-rolling main contrib non-free</span><br></pre></td></tr></table></figure>
+<img src="/../images/kali%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%8E%E6%BA%90/image-20251009191719775.png" alt="image-20251009191719775"></li>
+<li>按<code>shift+:</code>，进入命令行。输入<code>wq!</code>保存。<br><img src="/../images/kali%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%8E%E6%BA%90/image-20251009192120070.png" alt="image-20251009192120070"></li>
+<li>执行<code>sudo apt upgate</code>检查更新。<img src="/../images/kali%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%8E%E6%BA%90/image-20251009192324250.png" alt="image-20251009192324250"></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>kali</tag>
+      </tags>
+  </entry>
 </search>
