@@ -1385,4 +1385,21 @@
         <tag>kali</tag>
       </tags>
   </entry>
+  <entry>
+    <title>kali安装translate-shell及使用</title>
+    <url>/2025/10/10/kali%E5%AE%89%E8%A3%85translate-shell%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="工具说明"><a href="#工具说明" class="headerlink" title="工具说明"></a>工具说明</h2><p>translate-shell是一个命令行翻译工具。</p>
+<h2 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h2><p>执行<code>sudo apt update &amp;&amp; sudo apt install translate-shell</code>安装。<img src="/../images/kali%E5%AE%89%E8%A3%85translate-shell%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20251010140547591.png" alt="image-20251010140547591"></p>
+<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><ol>
+<li>简单翻译，可能响应有点慢。执行<code>echo &quot;hello&quot; | trans -e bing -t zh</code>。参数解释：<code>-e</code>指定翻译用的引擎，<code>-t</code>指定翻译的目标语言。<img src="/../images/kali%E5%AE%89%E8%A3%85translate-shell%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20251010140842208.png" alt="image-20251010140842208"></li>
+<li>查看支持的翻译引擎。执行<code>trans -list-engines</code>，默认是auto自动。<img src="/../images/kali%E5%AE%89%E8%A3%85translate-shell%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20251010141100058.png" alt="image-20251010141100058"></li>
+</ol>
+<h2 id="更优雅的使用方式"><a href="#更优雅的使用方式" class="headerlink" title="更优雅的使用方式"></a>更优雅的使用方式</h2><p>在 <code>.bashrc</code> 或 <code>.zshrc</code> 中添加，kali用<code>.zshrc</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">alias trans=&#x27;trans -e bing&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/kali%E5%AE%89%E8%A3%85translate-shell%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20251010141524336.png" alt="image-20251010141524336"><br>之后就执行<code>source ~/.zshrc</code>加载环境变量，最后就可以直接使用<code>echo &quot;Hello&quot; | trans -t zh</code>调用bing翻译了。<img src="/../images/kali%E5%AE%89%E8%A3%85translate-shell%E5%8F%8A%E4%BD%BF%E7%94%A8/image-20251010142149983.png" alt="image-20251010142149983"></p>
+]]></content>
+      <tags>
+        <tag>kali</tag>
+      </tags>
+  </entry>
 </search>
