@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="渗透测试,mcp,kali," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="背景介绍逛b站发现有用mcp调用kali做渗透测试的教程，动手搭建一个玩玩。 github仓库地址（https:&#x2F;&#x2F;github.com&#x2F;Wh0am123&#x2F;MCP-Kali-Server） 环境信息 git version 2.51.0.windows.2 Python 3.11.1 cherry studio kali（IP：192.168.1.19） win11（IP：192.168.1.61">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用MCP自动化调用kali进行渗透测试">
+<meta property="og:url" content="https://h4ckforjob.github.io/2025/10/11/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="h4ckforjob&#39;sblog">
+<meta property="og:description" content="背景介绍逛b站发现有用mcp调用kali做渗透测试的教程，动手搭建一个玩玩。 github仓库地址（https:&#x2F;&#x2F;github.com&#x2F;Wh0am123&#x2F;MCP-Kali-Server） 环境信息 git version 2.51.0.windows.2 Python 3.11.1 cherry studio kali（IP：192.168.1.19） win11（IP：192.168.1.61">
+<meta property="og:locale">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011045009942.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053013953.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053301120.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053459790.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053601067.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053641219.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053732605.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011054345977.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011054944409.png">
+<meta property="article:published_time" content="2025-10-10T20:27:26.000Z">
+<meta property="article:modified_time" content="2025-10-10T21:58:41.724Z">
+<meta property="article:author" content="h4ckforjob">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="mcp">
+<meta property="article:tag" content="kali">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://h4ckforjob.github.io/images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011045009942.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://h4ckforjob.github.io/2025/10/11/使用MCP自动化调用kali进行渗透测试/"/>
+
+
+
+
+
+  <title>使用MCP自动化调用kali进行渗透测试 | h4ckforjob'sblog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">h4ckforjob'sblog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://h4ckforjob.github.io/2025/10/11/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="h4ckforjob'sblog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用MCP自动化调用kali进行渗透测试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2025-10-11T04:27:26+08:00">
+                2025-10-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            浏览: <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span> 次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.7k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>逛b站发现有用mcp调用kali做渗透测试的教程，动手搭建一个玩玩。</p>
+<p>github仓库地址（<a target="_blank" rel="noopener" href="https://github.com/Wh0am123/MCP-Kali-Server%EF%BC%89">https://github.com/Wh0am123/MCP-Kali-Server）</a></p>
+<h3 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h3><ol>
+<li>git version 2.51.0.windows.2</li>
+<li>Python 3.11.1</li>
+<li>cherry studio</li>
+<li>kali（IP：192.168.1.19）</li>
+<li>win11（IP：192.168.1.61）</li>
+</ol>
+<h2 id="部署mcp服务器"><a href="#部署mcp服务器" class="headerlink" title="部署mcp服务器"></a>部署mcp服务器</h2><ol>
+<li><p>kali上安装mcp，执行<code>sudo apt update &amp;&amp; sudo apt install mcp-kali-server</code><img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011045009942.png" alt="image-20251011045009942"></p>
+</li>
+<li><p>win11中的cherry添加mcp服务器配置文件。</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;mcpServers&quot;: &#123;</span><br><span class="line">        &quot;kali-mcp&quot;: &#123;</span><br><span class="line">            &quot;command&quot;: &quot;C:\\Users\\h4ckf\\AppData\\Local\\Programs\\Python\\Python311\\python.exe&quot;,</span><br><span class="line">            &quot;args&quot;: [</span><br><span class="line">                &quot;C:\\Users\\h4ckf\\Documents\\[01]渗透测试工具\\mcp\\MCP-Kali-Server\\mcp_server.py&quot;,</span><br><span class="line">                &quot;--server&quot;,</span><br><span class="line">                &quot;http://192.168.1.19:5000/&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在kali中，clone仓库，创建虚拟环境，安装flask，执行kali_server.py。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Wh0am123/MCP-Kali-Server.git</span><br><span class="line">cd MCP-Kali-Server</span><br><span class="line">python3 -m venv ~/mcpkali</span><br><span class="line">source ~/mcpkali/bin/activate</span><br><span class="line">python3 -m pip install flask</span><br><span class="line">python3 kali_server.py</span><br></pre></td></tr></table></figure></li>
+<li>输出如下图，就是成功启动mcp服务器了。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053013953.png" alt="image-20251011053013953"></li>
+</ol>
+<h2 id="使用ai挖掘sql注入漏洞"><a href="#使用ai挖掘sql注入漏洞" class="headerlink" title="使用ai挖掘sql注入漏洞"></a>使用ai挖掘sql注入漏洞</h2><ol>
+<li>回到win11，开始对话，询问deepseek是否连接上kali mcp服务器，可以看到调用server_health工具检查连接状态，连接成功。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053301120.png" alt="image-20251011053301120"></li>
+<li>接下来实战，让ai进行渗透测试。这里我本地搭建了个sql-lab靶场。给出url让ai判断是否纯在sql注入漏洞。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053459790.png" alt="image-20251011053459790"></li>
+<li>ai判断存在sql注入，让他获取数据看看。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053601067.png" alt="image-20251011053601067"></li>
+<li>更进一步！让ai尝试getshell，可以看到报了些错误。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053641219.png" alt="image-20251011053641219"></li>
+<li>提示getshell成功，但是实际访问shell文件不存在。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011053732605.png" alt="image-20251011053732605"></li>
+<li>继续询问ai，ai给出结论getshell失败，看来ai还是有点幻觉，需要调教。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011054345977.png" alt="image-20251011054345977"></li>
+</ol>
+<h2 id="使用ai对某个url进行渗透测试"><a href="#使用ai对某个url进行渗透测试" class="headerlink" title="使用ai对某个url进行渗透测试"></a>使用ai对某个url进行渗透测试</h2><ol>
+<li>给出提示词：帮我对以下url进行渗透测试<a target="_blank" rel="noopener" href="http://192.168.1.60/sqli-labs/%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0ai%E8%B0%83%E7%94%A8%E4%BA%86%E5%A4%9A%E4%B8%AA%E5%B7%A5%E5%85%B7%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95%E3%80%82![image-20251011054831519](../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011054831519.png)">http://192.168.1.60/sqli-labs/，可以看到ai调用了多个工具进行测试。![image-20251011054831519](../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011054831519.png)</a></li>
+<li>kali后台也能看到。<img src="/../images/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/image-20251011054944409.png" alt="image-20251011054944409"></li>
+<li>最终结果。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br></pre></td><td class="code"><pre><span class="line">我将帮您对目标URL http://192.168.1.60/sqli-labs/ 进行渗透测试。首先让我检查服务器状态，然后进行全面的安全扫描。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fLPwmmMvB08-O_bLtzcER9&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">服务器状态正常，所有必要工具都可用。现在开始对目标进行渗透测试。首先进行端口扫描来了解目标系统的基本信息。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fgmMpWd5OvvKxl7w5Az7Bm&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;target&quot;: &quot;192.168.1.60&quot;, &quot;scan_type&quot;: &quot;-sV&quot;, &quot;ports&quot;: &quot;80,443,22,21,25,53,110,143,993,995&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">端口扫描结果显示目标在80端口运行Apache httpd 2.4.39服务。现在让我使用Nikto进行Web服务器漏洞扫描。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;f4C3VarNEpMPEgWCbQDw3v&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;target&quot;: &quot;http://192.168.1.60/sqli-labs/&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Nikto扫描发现了多个安全问题，包括：</span><br><span class="line">- 缺少安全头（X-Frame-Options, X-Content-Type-Options）</span><br><span class="line">- 过时的Apache和OpenSSL版本</span><br><span class="line">- 启用了TRACE方法（XST漏洞）</span><br><span class="line">- 暴露了.git目录和配置文件</span><br><span class="line"></span><br><span class="line">现在让我使用Gobuster进行目录枚举，寻找更多可访问的路径。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;ftoQeuKspDwsg3Lgegqag3&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/&quot;, &quot;mode&quot;: &quot;dir&quot;, &quot;wordlist&quot;: &quot;/usr/share/wordlists/dirb/common.txt&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Gobuster发现了多个目录，包括Images目录和.git目录。由于这是一个SQL注入实验环境（sqli-labs），现在让我使用SQLmap来检测SQL注入漏洞。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/&quot;, &quot;additional_args&quot;: &quot;--batch --level=3 --risk=3&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SQLmap扫描没有发现直接的SQL注入漏洞。由于这是一个SQL注入实验环境（sqli-labs），让我尝试访问具体的SQL注入练习页面。首先让我查看主页面内容，然后尝试访问具体的练习页面。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fiiR1AhhtnxW8_Z-nCb5-Z&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;command&quot;: &quot;curl -s \&quot;http://192.168.1.60/sqli-labs/\&quot; | head -50&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！我看到了这是一个SQL注入实验环境，包含多个练习页面（Less-1到Less-6等）。现在让我尝试访问第一个SQL注入练习页面，并使用SQLmap进行针对性的测试。</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/Less-1/?id=1&quot;, &quot;additional_args&quot;: &quot;--batch --level=3 --risk=3&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">太好了！SQLmap成功检测到了SQL注入漏洞。在Less-1页面发现了多种类型的SQL注入漏洞：</span><br><span class="line"></span><br><span class="line">1. **布尔盲注** (boolean-based blind)</span><br><span class="line">2. **错误型注入** (error-based)</span><br><span class="line">3. **时间盲注** (time-based blind)</span><br><span class="line">4. **UNION查询注入**</span><br><span class="line"></span><br><span class="line">现在让我进一步利用这个漏洞来获取数据库信息：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/Less-1/?id=1&quot;, &quot;additional_args&quot;: &quot;--batch --dbs&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！我成功获取了数据库列表，发现了12个数据库。现在让我查看&quot;security&quot;数据库（这通常是SQL注入实验的主要数据库）的表结构：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/Less-1/?id=1&quot;, &quot;additional_args&quot;: &quot;--batch -D security --tables&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！我发现了security数据库中的5个表。现在让我查看users表的内容，这通常包含敏感的用户信息：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/Less-1/?id=1&quot;, &quot;additional_args&quot;: &quot;--batch -D security -T users --dump&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！我成功获取了users表中的敏感数据，包含13个用户的用户名和密码。现在让我测试其他SQL注入练习页面，看看是否也存在类似的漏洞：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/Less-2/?id=1&quot;, &quot;additional_args&quot;: &quot;--batch --level=3 --risk=3&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！Less-2页面也存在SQL注入漏洞。现在让我进行更全面的渗透测试，检查其他安全漏洞。让我使用Dirb进行更深入的目录扫描：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fiWfQPhzPs9xlyNdkcvEbK&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/&quot;, &quot;wordlist&quot;: &quot;/usr/share/wordlists/dirb/big.txt&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">让我使用Gobuster进行更深入的目录扫描：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;ftoQeuKspDwsg3Lgegqag3&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/&quot;, &quot;mode&quot;: &quot;dir&quot;, &quot;wordlist&quot;: &quot;/usr/share/wordlists/dirb/big.txt&quot;, &quot;additional_args&quot;: &quot;-t 20&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">现在让我检查一下是否可以访问.git目录中的敏感文件，这可能会泄露源代码：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fiiR1AhhtnxW8_Z-nCb5-Z&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;command&quot;: &quot;curl -s \&quot;http://192.168.1.60/sqli-labs/.git/config\&quot;&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！我成功访问了.git配置文件，确认这是来自GitHub的sqli-labs项目。现在让我检查是否有其他敏感文件泄露，并尝试使用Hydra进行暴力破解测试（如果有登录功能的话）。首先让我检查是否有登录页面：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fiiR1AhhtnxW8_Z-nCb5-Z&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;command&quot;: &quot;curl -s \&quot;http://192.168.1.60/sqli-labs/\&quot; | grep -i \&quot;login\\|admin\\|auth\\|password\&quot;&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">现在让我总结渗透测试的结果，并测试其他SQL注入练习页面。让我检查Less-3页面：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fncrbrgaPTuUXbrLCJOk8c&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;url&quot;: &quot;http://192.168.1.60/sqli-labs/Less-3/?id=1&quot;, &quot;additional_args&quot;: &quot;--batch --level=3 --risk=3&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">很好！Less-3页面也存在SQL注入漏洞。现在让我进行最终的渗透测试总结。让我检查一下是否有其他类型的漏洞，比如文件包含或命令注入：</span><br><span class="line"></span><br><span class="line">&lt;tool_use&gt;</span><br><span class="line">  &lt;name&gt;fiiR1AhhtnxW8_Z-nCb5-Z&lt;/name&gt;</span><br><span class="line">  &lt;arguments&gt;&#123;&quot;command&quot;: &quot;curl -s \&quot;http://192.168.1.60/sqli-labs/Less-1/?id=1&#x27; AND 1=1 -- \&quot;&quot;&#125;&lt;/arguments&gt;</span><br><span class="line">&lt;/tool_use&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 渗透测试总结报告</span><br><span class="line"></span><br><span class="line">基于对目标URL `http://192.168.1.60/sqli-labs/` 的全面渗透测试，我发现了以下严重安全问题：</span><br><span class="line"></span><br><span class="line">### 🔴 高危漏洞</span><br><span class="line"></span><br><span class="line">#### 1. **SQL注入漏洞**</span><br><span class="line">- **位置**: 多个SQL注入练习页面</span><br><span class="line">- **漏洞详情**:</span><br><span class="line">  - **Less-1**: GET参数`id`存在SQL注入</span><br><span class="line">  - **Less-2**: GET参数`id`存在SQL注入</span><br><span class="line">  - **Less-3**: GET参数`id`存在SQL注入</span><br><span class="line">- **攻击向量**: 布尔盲注、错误型注入、时间盲注、UNION查询注入</span><br><span class="line">- **影响**: 完全数据库访问权限</span><br><span class="line"></span><br><span class="line">#### 2. **数据库信息泄露**</span><br><span class="line">- **获取的数据库**: 12个数据库</span><br><span class="line">  - `security` (主要实验数据库)</span><br><span class="line">  - `mysql` (系统数据库)</span><br><span class="line">  - `information_schema` (系统数据库)</span><br><span class="line">  - 以及其他多个CMS数据库</span><br><span class="line"></span><br><span class="line">#### 3. **敏感数据泄露**</span><br><span class="line">- **用户表数据**: 成功提取13个用户记录</span><br><span class="line">- **泄露信息**: 用户名和明文密码</span><br><span class="line">- **示例数据**:</span><br><span class="line">  - admin/admin</span><br><span class="line">  - Angelina/I-kill-you</span><br><span class="line">  - 等多个用户凭证</span><br><span class="line"></span><br><span class="line">### 🟡 中危漏洞</span><br><span class="line"></span><br><span class="line">#### 1. **信息泄露**</span><br><span class="line">- **.git目录暴露**: 可访问Git配置文件</span><br><span class="line">- **源代码泄露风险**: 可能暴露应用程序源代码</span><br><span class="line">- **版本信息**: 确认项目为sqli-labs教学项目</span><br><span class="line"></span><br><span class="line">#### 2. **服务器配置问题**</span><br><span class="line">- **过时软件版本**:</span><br><span class="line">  - Apache 2.4.39 (已过时)</span><br><span class="line">  - OpenSSL 1.1.1b (已过时)</span><br><span class="line">  - PHP 5.5.9 (已过时)</span><br><span class="line">- **安全头缺失**:</span><br><span class="line">  - 缺少X-Frame-Options</span><br><span class="line">  - 缺少X-Content-Type-Options</span><br><span class="line"></span><br><span class="line">### 🟢 低危漏洞</span><br><span class="line"></span><br><span class="line">#### 1. **目录遍历**</span><br><span class="line">- 发现多个可访问目录</span><br><span class="line">- 存在.git、Images等目录</span><br><span class="line"></span><br><span class="line">### 📊 风险评估</span><br><span class="line"></span><br><span class="line">| 风险等级 | 数量 | 影响程度 |</span><br><span class="line">|---------|------|----------|</span><br><span class="line">| 高危 | 3+ | 严重 |</span><br><span class="line">| 中危 | 2 | 中等 |</span><br><span class="line">| 低危 | 1 | 低 |</span><br><span class="line"></span><br><span class="line">### 💡 修复建议</span><br><span class="line"></span><br><span class="line">1. **立即修复**:</span><br><span class="line">   - 对所有用户输入进行参数化查询</span><br><span class="line">   - 实施输入验证和过滤</span><br><span class="line">   - 移除或保护.git目录</span><br><span class="line"></span><br><span class="line">2. **中期修复**:</span><br><span class="line">   - 升级软件到最新版本</span><br><span class="line">   - 实施适当的HTTP安全头</span><br><span class="line">   - 定期安全审计</span><br><span class="line"></span><br><span class="line">3. **长期改进**:</span><br><span class="line">   - 实施Web应用防火墙(WAF)</span><br><span class="line">   - 建立持续的安全监控</span><br><span class="line">   - 进行安全开发培训</span><br><span class="line"></span><br><span class="line">### 🎯 渗透测试结论</span><br><span class="line"></span><br><span class="line">目标系统存在严重的SQL注入漏洞，攻击者可以完全控制数据库，获取敏感信息，并可能进一步渗透系统。建议立即采取措施修复这些漏洞，特别是SQL注入问题。</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" rel="tag"># 渗透测试</a>
+          
+            <a href="/tags/mcp/" rel="tag"># mcp</a>
+          
+            <a href="/tags/kali/" rel="tag"># kali</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/10/10/kali%E7%9A%84python%E7%9A%84pip%E5%AE%89%E8%A3%85%E4%B8%8D%E4%BA%86%E5%BA%93%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="next" title="kali的python的pip安装不了库的解决方案">
+                <i class="fa fa-chevron-left"></i> kali的python的pip安装不了库的解决方案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">环境信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2mcp%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">部署mcp服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ai%E6%8C%96%E6%8E%98sql%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="nav-number">3.</span> <span class="nav-text">使用ai挖掘sql注入漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ai%E5%AF%B9%E6%9F%90%E4%B8%AAurl%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">使用ai对某个url进行渗透测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">h4ckforjob</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+    <div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        本站访客数: <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        本站访问量: <span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
