@@ -1534,4 +1534,36 @@
         <tag>kali</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Ollama的安装与使用</title>
+    <url>/2025/10/11/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="下载安装Ollama"><a href="#下载安装Ollama" class="headerlink" title="下载安装Ollama"></a>下载安装Ollama</h2><ol>
+<li><p>下载地址（<a href="https://ollama.com/download%EF%BC%89![image-20251011062349246](../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011062349246.png)">https://ollama.com/download）![image-20251011062349246](../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011062349246.png)</a></p>
+</li>
+<li><p>安装，默认在c盘。<img src="/../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011062407372.png" alt="image-20251011062407372"></p>
+</li>
+<li><p>安装完毕，自启动。<img src="/../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011062502775.png" alt="image-20251011062502775"></p>
+</li>
+</ol>
+<h2 id="下载模型"><a href="#下载模型" class="headerlink" title="下载模型"></a>下载模型</h2><ol>
+<li>点击Models，可以看到很多模型，这里选择deepseek-r1:8b。</li>
+</ol>
+<p><img src="/../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011063047813.png" alt="image-20251011063047813"></p>
+<ol start="2">
+<li>命令行运行<code>ollama run deepseek-r1:8b</code>，如果下载速度变慢，按下ctrl+c中断，再重新执行下载命令。<img src="/../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011063428819.png" alt="image-20251011063428819"></li>
+</ol>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><ol>
+<li>显示版本号。<code>ollama -v</code></li>
+<li>显示所有安装模型的版本。<code>ollama list</code></li>
+<li>删除指定模型。<code>ollama rm 模型名称</code></li>
+<li>启动ollama服务。<code>ollama serve</code>服务的运行地址：<a href="http://127.0.0.1:11434/">http://127.0.0.1:11434/</a></li>
+<li>退出ollama。<code>/bye</code></li>
+</ol>
+<h2 id="使用模型"><a href="#使用模型" class="headerlink" title="使用模型"></a>使用模型</h2><p>下载完模型后自动进入对话。<img src="/../images/Ollama%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/image-20251011065516975.png" alt="image-20251011065516975"></p>
+]]></content>
+      <tags>
+        <tag>ai</tag>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
 </search>
