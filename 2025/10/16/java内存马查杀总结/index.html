@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="应急,java,内存马," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="环境搭建 jspstudy。https:&#x2F;&#x2F;public.xp.cn&#x2F;upgrades&#x2F;JspStudy.zip vc9下载安装。https:&#x2F;&#x2F;www.php.cn&#x2F;xiazai&#x2F;gongju&#x2F;1479  使用哥斯拉webshell管理工具Godzilla-v4.0.1.jar，生成shell。 把生成的shell.jsp放到web目录下。 使用哥斯拉客户端连接shell。 进入shell后，选">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java内存马查杀总结">
+<meta property="og:url" content="https://h4ckforjob.github.io/2025/10/16/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="h4ckforjob&#39;sblog">
+<meta property="og:description" content="环境搭建 jspstudy。https:&#x2F;&#x2F;public.xp.cn&#x2F;upgrades&#x2F;JspStudy.zip vc9下载安装。https:&#x2F;&#x2F;www.php.cn&#x2F;xiazai&#x2F;gongju&#x2F;1479  使用哥斯拉webshell管理工具Godzilla-v4.0.1.jar，生成shell。 把生成的shell.jsp放到web目录下。 使用哥斯拉客户端连接shell。 进入shell后，选">
+<meta property="og:locale">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016041726390.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016042336500.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016042702783.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016042901573.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016043100556.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016043551780.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016043708116.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016044911108.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017013936543.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017014406259.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017014617997.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017014854804.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017015130067.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017015224980.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020439974.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020610042.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020652636.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020741645.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017022929756.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017023032444.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017030916595.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017031306770.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017031427157.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017031601892.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017035533266.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017035702825.png">
+<meta property="article:published_time" content="2025-10-15T20:03:43.000Z">
+<meta property="article:modified_time" content="2025-10-18T21:36:33.693Z">
+<meta property="article:author" content="h4ckforjob">
+<meta property="article:tag" content="应急">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="内存马">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://h4ckforjob.github.io/images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016041726390.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://h4ckforjob.github.io/2025/10/16/java内存马查杀总结/"/>
+
+
+
+
+
+  <title>java内存马查杀总结 | h4ckforjob'sblog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">h4ckforjob'sblog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://h4ckforjob.github.io/2025/10/16/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="h4ckforjob'sblog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java内存马查杀总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2025-10-16T04:03:43+08:00">
+                2025-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" itemprop="url" rel="index">
+                    <span itemprop="name">应急响应</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            浏览: <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span> 次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><ol>
+<li>jspstudy。<a target="_blank" rel="noopener" href="https://public.xp.cn/upgrades/JspStudy.zip">https://public.xp.cn/upgrades/JspStudy.zip</a></li>
+<li>vc9下载安装。<a target="_blank" rel="noopener" href="https://www.php.cn/xiazai/gongju/1479">https://www.php.cn/xiazai/gongju/1479</a><br> <img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016041726390.png" alt="image-20251016041726390"></li>
+<li>使用哥斯拉webshell管理工具Godzilla-v4.0.1.jar，生成shell。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016042336500.png" alt="image-20251016042336500"></li>
+<li>把生成的shell.jsp放到web目录下。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016042702783.png" alt="image-20251016042702783"></li>
+<li>使用哥斯拉客户端连接shell。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016042901573.png" alt="image-20251016042901573"></li>
+<li>进入shell后，选择MemoryShell选项卡，点击run，加载内存马。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016043100556.png" alt="image-20251016043100556"></li>
+<li>连接内存马，注意password和secretkey要和上一步生成的一致。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016043551780.png" alt="image-20251016043551780"></li>
+<li>查看到基础信息，内存马连接成功。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016043708116.png" alt="image-20251016043708116"></li>
+</ol>
+<h2 id="内存马查杀"><a href="#内存马查杀" class="headerlink" title="内存马查杀"></a>内存马查杀</h2><h3 id="使用TomcatMemshellScanner-jsp查杀"><a href="#使用TomcatMemshellScanner-jsp查杀" class="headerlink" title="使用TomcatMemshellScanner.jsp查杀"></a>使用TomcatMemshellScanner.jsp查杀</h3><ol>
+<li>工具下载地址：<a target="_blank" rel="noopener" href="https://github.com/Seven1an/TomcatMemshellScanner">https://github.com/Seven1an/TomcatMemshellScanner</a></li>
+<li>将查杀jsp脚本放到web目录，访问报错了，需要debug一下，暂时跳过。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251016044911108.png" alt="image-20251016044911108"></li>
+</ol>
+<h3 id="使用arthas查杀"><a href="#使用arthas查杀" class="headerlink" title="使用arthas查杀"></a>使用arthas查杀</h3><ol>
+<li>工具下载地址：<a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/download.html">https://arthas.aliyun.com/doc/download.html</a></li>
+<li>执行<code>&amp; &quot;C:\Program Files\Java\jdk1.8.0_261\bin\java.exe&quot; -jar arthas-boot.jar</code></li>
+<li>开始分析，找出可疑类。<table>
+<thead>
+<tr>
+<th>组件类型</th>
+<th>一键筛查命令</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Filter</strong></td>
+<td><code>sc *.Filter</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Servlet</strong></td>
+<td><code>sc *.Servlet</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Listener</strong></td>
+<td><code>sc *.Listener</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Valve</strong></td>
+<td><code>sc *.Valve</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Spring</strong></td>
+<td><code>sc *</code></td>
+<td>grep -E “(Controller|Interceptor|WebFilter)”</td>
+</tr>
+</tbody></table>
+</li>
+<li>反编译可疑类。<code>jad --source-only &lt;可疑类&gt;</code></li>
+</ol>
+<h2 id="实战-手动部署tomcat8到内存马查杀"><a href="#实战-手动部署tomcat8到内存马查杀" class="headerlink" title="实战-手动部署tomcat8到内存马查杀"></a>实战-手动部署tomcat8到内存马查杀</h2><ol>
+<li>下载环境。<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.99/bin/">https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.99/bin/</a></li>
+<li>配置好java环境变量后，进到这个目录，<code>C:\Program Files\Apache Software Foundation\Tomcat 8.5\bin</code>，执行<code>.\startup.bat</code>，看到如下输出说明启动web服务器成功。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">17-Oct-2025 01:30:51.316 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Server.服务器版本: Apache Tomcat/8.5.99</span><br><span class="line">17-Oct-2025 01:30:51.316 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 服务器构建:        Feb 14 2024 22:52:13 UTC</span><br><span class="line">17-Oct-2025 01:30:51.316 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 服务器版本号:      8.5.99.0</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 操作系统名称:      Windows 10</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log OS.版本:           10.0</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 架构:              amd64</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Java 环境变量:     C:\Program Files\Java\jdk1.8.0_261\jre</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Java虚拟机版本:    1.8.0_261-b12</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log JVM.供应商:        Oracle Corporation</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:     C:\Program Files\Apache Software Foundation\Tomcat 8.5</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:     C:\Program Files\Apache Software Foundation\Tomcat 8.5</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Djava.util.logging.config.file=C:\Program Files\Apache Software Foundation\Tomcat 8.5\conf\logging.properties</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Djdk.tls.ephemeralDHKeySize=2048</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Djava.protocol.handler.pkgs=org.apache.catalina.webresources</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Dignore.endorsed.dirs=</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Dcatalina.base=C:\Program Files\Apache Software Foundation\Tomcat 8.5</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Dcatalina.home=C:\Program Files\Apache Software Foundation\Tomcat 8.5</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log 命令行参数：       -Djava.io.tmpdir=C:\Program Files\Apache Software Foundation\Tomcat 8.5\temp</span><br><span class="line">17-Oct-2025 01:30:51.325 信息 [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent 在java.library.path:[C:\Program Files\Java\jdk1.8.0_261\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_261\bin\;C:\Program Files\Java\jdk1.8.0_261\lib\;C:\Users\h4ckf\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\h4ckf\AppData\Local\Programs\Python\Python311\;C:\Users\h4ckf\AppData\Local\Microsoft\WindowsApps;C:\Users\h4ckf\AppData\Local\Programs\Microsoft VS Code\bin;;C:\Users\h4ckf\AppData\Local\Programs\Ollama;.]上找不到基于APR的Apache Tomcat本机库，该库允许在生产环境中获得最佳性能</span><br><span class="line">17-Oct-2025 01:30:51.448 信息 [main] org.apache.coyote.AbstractProtocol.init 初始化协议处理器 [&quot;http-nio-8080&quot;]</span><br><span class="line">17-Oct-2025 01:30:51.464 信息 [main] org.apache.catalina.startup.Catalina.load Initialization processed in 486 ms</span><br><span class="line">17-Oct-2025 01:30:51.513 信息 [main] org.apache.catalina.core.StandardService.startInternal 正在启动服务[Catalina]</span><br><span class="line">17-Oct-2025 01:30:51.513 信息 [main] org.apache.catalina.core.StandardEngine.startInternal 正在启动 Servlet 引擎：[Apache Tomcat/8.5.99]</span><br><span class="line">17-Oct-2025 01:30:51.513 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory 把web 应用程序部署到目录 [C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\docs]</span><br><span class="line">17-Oct-2025 01:30:51.935 警告 [localhost-startStop-1] org.apache.catalina.util.SessionIdGeneratorBase.createSecureRandom 使用[SHA1PRNG]创建会话ID生成的SecureRandom实例花费了[119]毫秒。</span><br><span class="line">17-Oct-2025 01:30:51.983 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Web应用程序目录[C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\docs]的部署已在[470]毫秒内完成</span><br><span class="line">17-Oct-2025 01:30:51.983 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory 把web 应用程序部署到目录 [C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\examples]</span><br><span class="line">17-Oct-2025 01:30:52.344 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Web应用程序目录[C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\examples]的部署已在[361]毫秒内完成</span><br><span class="line">17-Oct-2025 01:30:52.369 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory 把web 应用程序部署到目录 [C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\host-manager]</span><br><span class="line">17-Oct-2025 01:30:52.387 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Web应用程序目录[C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\host-manager]的部署已在[43]毫秒内完成</span><br><span class="line">17-Oct-2025 01:30:52.387 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory 把web 应用程序部署到目录 [C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\manager]</span><br><span class="line">17-Oct-2025 01:30:52.418 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Web应用程序目录[C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\manager]的部署已在[31]毫秒内完成</span><br><span class="line">17-Oct-2025 01:30:52.418 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory 把web 应用程序部署到目录 [C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\ROOT]</span><br><span class="line">17-Oct-2025 01:30:52.435 信息 [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Web应用程序目录[C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\ROOT]的部署已在[17]毫秒内完成</span><br><span class="line">17-Oct-2025 01:30:52.453 信息 [main] org.apache.coyote.AbstractProtocol.start 开始协议处理句柄[&quot;http-nio-8080&quot;]</span><br><span class="line">17-Oct-2025 01:30:52.470 信息 [main] org.apache.catalina.startup.Catalina.start Server startup in 1006 ms</span><br></pre></td></tr></table></figure></li>
+<li>如果输出中文乱码，请编辑<code>C:\Program Files\Apache Software Foundation\Tomcat 8.5\conf\logging.properties</code>配置文件，修改UTF-8为GBK。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017013936543.png" alt="image-20251017013936543"></li>
+<li>生成哥斯拉jsp的webshell，并放到web根目录<code>C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\ROOT</code></li>
+<li>连接webshell，再注入内存马，再连接内存马webshell。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017014406259.png" alt="image-20251017014406259"></li>
+<li>使用<code>TomcatMemshellScanner.jsp</code>查杀，将脚本放到web根目录，并访问，可以看到磁盘上无落地文件的项目。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017014617997.png" alt="image-20251017014617997"></li>
+<li>可以点击kill，杀掉内存马进程，杀掉之后返回哥斯拉，发现再次进入shell返回初始化失败。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017014854804.png" alt="image-20251017014854804"></li>
+<li>重新注入内存马，再使用arthas查杀。进入arthas终端，选择1，也就是tomcat的进程。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017015130067.png" alt="image-20251017015130067"><img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017015224980.png" alt="image-20251017015224980"></li>
+<li>执行<code>sc *.Filter</code>。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020439974.png" alt="image-20251017020439974"></li>
+<li>执行<code>sc *.Servlet</code>。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020610042.png" alt="image-20251017020610042"></li>
+<li>执行<code>sc *.Listener</code>。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020652636.png" alt="image-20251017020652636"></li>
+<li>执行<code>sc *.Valve</code>。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017020741645.png" alt="image-20251017020741645"></li>
+<li>执行<code>sc * | grep -E &quot;(Controller|Interceptor|WebFilter)&quot;</code></li>
+<li>执行<code>mbean | grep &quot;name=/&quot;</code>。发现可疑项目。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017022929756.png" alt="image-20251017022929756"></li>
+<li>查看可疑<code>classloader</code><img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017023032444.png" alt="image-20251017023032444"></li>
+<li>使用cop.jar配合d盾查找内存马。cop.jar下载地址：<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/LandGrey/copagent/release/cop.jar">https://raw.githubusercontent.com/LandGrey/copagent/release/cop.jar</a></li>
+<li>执行<code>java -jar .\cop.jar -p 12684</code>。参数解释：-p指定web容器进程pid。等待一会，cop.jar会把所有java类反编译成java代码。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017030916595.png" alt="image-20251017030916595"></li>
+<li>使用d盾查杀。结果如图。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017031306770.png" alt="image-20251017031306770"></li>
+<li>查看查杀出来的java文件代码。确实是webshell文件。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017031427157.png" alt="image-20251017031427157"></li>
+<li>也可以问ai，确认是否是内存马。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017031601892.png" alt="image-20251017031601892"></li>
+<li>最后一招，dump所有内存，过滤关键字查找可疑内存马。执行<code>heapdump</code>。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017035533266.png" alt="image-20251017035533266"></li>
+<li>将dump出来的文件拷贝到linux环境下。执行<code>strings heapdump2025-10-17-03-522550906346405245180.hprof  | grep &quot;POST /&quot;</code>，过滤可疑的POST请求，可以看到我们注入的内存马。<img src="/../images/java%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80%E6%80%BB%E7%BB%93/image-20251017035702825.png" alt="image-20251017035702825"></li>
+<li>还可以执行<code>strings heapdump2025-10-17-03-522550906346405245180.hprof  | grep -E &quot;/webapps/.*?\!&quot;| sort -u</code></li>
+<li>在linux下可能报错<code>Unable to open socket file: target process not responding or HotSpot VM not loaded</code>该报错是因为tomcat是以tomcat用户运行的，而我们用arthas是用root用户运行的。JVM 只能 attach 同样用户下的 java 进程。使用runuser命令即可以tomcat用户运行arthas。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runuser -l tomcat -c &quot;java -jar /usr/share/tomcat/arthas-boot.jar&quot;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>冰蝎、哥斯拉 内存马应急排查：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_60571990/article/details/128487029">https://blog.csdn.net/m0_60571990/article/details/128487029</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BA%94%E6%80%A5/" rel="tag"># 应急</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/%E5%86%85%E5%AD%98%E9%A9%AC/" rel="tag"># 内存马</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/10/13/kali%E7%9A%84ffuf%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" rel="next" title="kali的ffuf工具使用">
+                <i class="fa fa-chevron-left"></i> kali的ffuf工具使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2025/10/20/kali%E4%B8%8B%E5%B8%B8%E7%94%A8%E5%AD%97%E5%85%B8%E8%A7%A3%E8%AF%BB/" rel="prev" title="kali下常用字典解读">
+                kali下常用字典解读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80"><span class="nav-number">2.</span> <span class="nav-text">内存马查杀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8TomcatMemshellScanner-jsp%E6%9F%A5%E6%9D%80"><span class="nav-number">2.1.</span> <span class="nav-text">使用TomcatMemshellScanner.jsp查杀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8arthas%E6%9F%A5%E6%9D%80"><span class="nav-number">2.2.</span> <span class="nav-text">使用arthas查杀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2tomcat8%E5%88%B0%E5%86%85%E5%AD%98%E9%A9%AC%E6%9F%A5%E6%9D%80"><span class="nav-number">3.</span> <span class="nav-text">实战-手动部署tomcat8到内存马查杀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">h4ckforjob</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+    <div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        本站访客数: <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        本站访问量: <span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
