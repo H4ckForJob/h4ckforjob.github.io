@@ -2448,4 +2448,20 @@
         <tag>sql注入</tag>
       </tags>
   </entry>
+  <entry>
+    <title>claude code使用入门</title>
+    <url>/2026/04/04/claude-code%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="申请longcat免费api"><a href="#申请longcat免费api" class="headerlink" title="申请longcat免费api"></a>申请longcat免费api</h1><p><a href="https://longcat.chat/platform/">https://longcat.chat/platform/</a></p>
+<h1 id="安装cc-switch"><a href="#安装cc-switch" class="headerlink" title="安装cc-switch"></a>安装cc-switch</h1><p>下载地址<br><a href="https://github.com/farion1231/cc-switch">https://github.com/farion1231/cc-switch</a></p>
+<p>安装参考文章<br><a href="https://www.runoob.com/ai-agent/cc-switch.html">https://www.runoob.com/ai-agent/cc-switch.html</a></p>
+<h1 id="安装claude-code-for-vs-code插件"><a href="#安装claude-code-for-vs-code插件" class="headerlink" title="安装claude code for vs code插件"></a>安装claude code for vs code插件</h1><p><img src="/../images/claude-code%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/image-20260404073306928.png" alt="image-20260404073306928"></p>
+<p>安装完毕，测试使用</p>
+<p><img src="/../images/claude-code%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/image-20260404073940109.png" alt="image-20260404073940109"></p>
+<p>成品使用</p>
+<p><img src="/../images/claude-code%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/image-20260404075403203.png" alt="image-20260404075403203"></p>
+]]></content>
+      <tags>
+        <tag>Ai编程</tag>
+      </tags>
+  </entry>
 </search>

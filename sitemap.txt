@@ -1,3 +1,4 @@
+https://h4ckforjob.github.io/2026/04/04/claude-code%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/
 https://h4ckforjob.github.io/2025/12/17/sql%E6%B3%A8%E5%85%A5%E8%AF%A6%E8%A7%A3/
 https://h4ckforjob.github.io/2025/10/20/kali%E4%B8%8B%E5%B8%B8%E7%94%A8%E5%AD%97%E5%85%B8%E8%A7%A3%E8%AF%BB/
 https://h4ckforjob.github.io/2025/10/11/%E4%BD%BF%E7%94%A8MCP%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B0%83%E7%94%A8kali%E8%BF%9B%E8%A1%8C%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/
@@ -64,6 +65,7 @@ https://h4ckforjob.github.io/tags/java/
 https://h4ckforjob.github.io/tags/%E5%86%85%E5%AD%98%E9%A9%AC/
 https://h4ckforjob.github.io/tags/%E5%AD%97%E5%85%B8/
 https://h4ckforjob.github.io/tags/sql%E6%B3%A8%E5%85%A5/
+https://h4ckforjob.github.io/tags/Ai%E7%BC%96%E7%A8%8B/
 https://h4ckforjob.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/
 https://h4ckforjob.github.io/categories/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/
 https://h4ckforjob.github.io/categories/web%E5%B7%A5%E5%85%B7/
