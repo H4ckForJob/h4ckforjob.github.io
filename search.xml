@@ -2464,4 +2464,67 @@
         <tag>Ai编程</tag>
       </tags>
   </entry>
+  <entry>
+    <title>使用easytier异地组网</title>
+    <url>/2026/06/20/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/</url>
+    <content><![CDATA[<h1 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://easytier.cn/guide/download.html</span><br></pre></td></tr></table></figure>
+<p>根据提示选择对应操作系统+架构的二进制zip包</p>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620085231807.png" alt="image-20260620085231807"><br>上传到你的vps服务器，使用unzip解压，并进到解压后目录，执行<code>./easytier-core --version</code>看到能输出版本号，则说明安装成功。</p>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620085454729.png" alt="image-20260620085454729"></p>
+<p>windows安装选择对应exe即可。</p>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620094517497.png" alt="image-20260620094517497"></p>
+<h1 id="异地组网"><a href="#异地组网" class="headerlink" title="异地组网"></a>异地组网</h1><p>vps上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ./easytier-core \</span><br><span class="line">--network-name MyNet2026 \</span><br><span class="line">--network-secret 你的网络密码 \</span><br><span class="line">--private-mode true \</span><br><span class="line">-l tcp://0.0.0.0:11010 \</span><br><span class="line">-l udp://0.0.0.0:11010 \</span><br><span class="line">-l wg://0.0.0.0:11011</span><br></pre></td></tr></table></figure>
+<p>参数说明</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">--network-name 网络名称</span><br><span class="line">--network-secret 网络密钥</span><br><span class="line">--private-mode true 私有模式</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620094321454.png" alt="image-20260620094321454"><br>在windows主机上配置网络</p>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620094722760.png" alt="image-20260620094722760"></p>
+<p>填写网络名称，网络密码，初始节点信息，点击底下运行网络，即可组网。</p>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620094843301.png" alt="image-20260620094843301"></p>
+<p>目前只有两个设备，应该能看到如下输出，节点信息（2）：</p>
+<p><img src="/../images/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/image-20260620094945678.png" alt="image-20260620094945678"></p>
+<p>等后续macbook到了，再测试多设备异地组网。</p>
+]]></content>
+      <tags>
+        <tag>异地组网</tag>
+        <tag>easytier</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>工具开发-哥斯拉Godzilla-v4.0.1版本二次开发</title>
+    <url>/2026/05/25/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="软件及版本"><a href="#软件及版本" class="headerlink" title="软件及版本"></a>软件及版本</h2><ol>
+<li>java1.8.0_275</li>
+<li>idea2026.1.2</li>
+<li>Godzilla-v4.0.1.jar</li>
+<li>claude+deepseek</li>
+</ol>
+<h2 id="开发环境搭建"><a href="#开发环境搭建" class="headerlink" title="开发环境搭建"></a>开发环境搭建</h2><p>首先在这个在线平台上传Godzilla-v4.0.1.jar，进行反编译：<a href="https://www.decompiler.com/">https://www.decompiler.com/</a></p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525163421451.png" alt="image-20260525163421451"><br>反编译完成后，点击Download ZIP下载结果。</p>
+<p>创建lib目录，src目录，以及将反编译后的源码复制进来。<img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525170229468.png" alt="image-20260525170229468"></p>
+<p>将Godzilla-v4.0.1.jar放到lib目录，然后在“项目结构”-“项目设置”-“模块”-“依赖”中添加<br><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525165500647.png" alt="image-20260525165500647"><br>将反编译的src\META-INF&#x2F;MANIFEST.MF源文件，放到src下面，保持目录结构。<br>将godzilla_code\godzilladec\core\ui\MainActivity.java文件复制到src目录下，保持目录结构。完成后结构如图。<img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525170551245.png" alt="image-20260525170551245"></p>
+<p>然后添加主类。</p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525170734045.png" alt="image-20260525170734045"></p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525170815746.png" alt="image-20260525170815746"></p>
+<p>测试修改标题并构建项目。</p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525170903542.png" alt="image-20260525170903542"></p>
+<p>构建项目完成后点击“构建工件”。</p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525170956070.png" alt="image-20260525170956070"></p>
+<p>构建完毕后即可在out目录下看到jar包。</p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525171108780.png" alt="image-20260525171108780"></p>
+<p>此时执行<code>java -jar .\godzilla_code.jar</code>运行包会报hash校验错误。需要修改代码。<br><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525171213468.png" alt="image-20260525171213468"><br>将<code>godzilla_code\godzilladec\core\ApplicationConfig.java</code>文件复制到src，并且保持路径结构一致。删除校验代码，并返回。</p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525171539128.png" alt="image-20260525171539128"></p>
+<p>再次构建工件，运行生成的jar包，应该就能正常运行哥斯拉了。但我测试构建的工件代码没更新，hash校验还是失败，这里卡了一下，后来使用claude code+deepseek找到原因，并自动解决了。提示词如图。</p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525171820315.png" alt="image-20260525171820315"></p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525174033207.png" alt="image-20260525174033207"></p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525174109077.png" alt="image-20260525174109077"></p>
+<p><img src="/../images/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91-%E5%93%A5%E6%96%AF%E6%8B%89Godzilla-v4-0-1%E7%89%88%E6%9C%AC%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/image-20260525174122218.png" alt="image-20260525174122218"></p>
+<p>经过ai一通修复，终于能修改代码，并成功构建工件了。</p>
+<h1 id="开始二开"><a href="#开始二开" class="headerlink" title="开始二开"></a>开始二开</h1>]]></content>
+      <tags>
+        <tag>工具开发</tag>
+        <tag>哥斯拉</tag>
+      </tags>
+  </entry>
 </search>
